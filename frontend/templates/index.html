@@ -1,0 +1,39 @@
+<html>
+    <head>
+        
+    </head>
+    <body>
+
+        {% if player and request.user.is_authenticated %}
+
+            {% if player.active_session %}
+
+                <a href="{% url resume player.active_session.id %}">Resume</a>
+
+                <br />
+
+            {% endif %}
+
+            <form action="{% url begin %}" method="post" id="new">
+
+                {% csrf_token %}
+
+                <input type="submit" value="New" />
+
+            </form>
+
+            <br />
+
+            <a href="{% url preferences %}">Settings</a>, 
+            <a href="{% url profile player.id %}">My Profile</a>
+            <a href="{% url logout %}">Logout</a>
+
+        {% else %}
+
+            <a href="{% url register %}">Sign up</a>
+            <a href="{% url login %}">Login</a>
+
+        {% endif %}
+
+    </body>
+</html>

@@ -1,0 +1,313 @@
+[
+  {
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+      "username": "anon", 
+      "first_name": "Anonymous", 
+      "last_name": "", 
+      "is_active": true, 
+      "is_superuser": false, 
+      "is_staff": false
+    }
+  },
+
+  {
+    "pk": 1,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 3,
+      "name": "Scrap"
+    }
+  },
+  {
+    "pk": 2,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 4,
+      "name": "Treasure"
+    }
+  },
+
+  {
+    "pk": 3,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 0,
+      "name": "Weapon",
+      "value": 2
+    }
+  },
+  {
+    "pk": 4,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 0,
+      "name": "Weapon",
+      "value": 3
+    }
+  },
+  {
+    "pk": 5,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 0,
+      "name": "Weapon",
+      "value": 4
+    }
+  },
+  {
+    "pk": 6,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 0,
+      "name": "Weapon",
+      "value": 5
+    }
+  },
+  {
+    "pk": 7,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 0,
+      "name": "Weapon",
+      "value": 6
+    }
+  },
+  {
+    "pk": 8,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 0,
+      "name": "Weapon",
+      "value": 7
+    }
+  },
+  {
+    "pk": 9,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 0,
+      "name": "Weapon",
+      "value": 8
+    }
+  },
+  {
+    "pk": 10,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 0,
+      "name": "Weapon",
+      "value": 9
+    }
+  },
+  {
+    "pk": 11,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 0,
+      "name": "Weapon",
+      "value": 10
+    }
+  },
+
+  {
+    "pk": 12,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 1,
+      "name": "Potion",
+      "value": 2
+    }
+  },
+  {
+    "pk": 13,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 1,
+      "name": "Potion",
+      "value": 3
+    }
+  },
+  {
+    "pk": 14,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 1,
+      "name": "Potion",
+      "value": 4
+    }
+  },
+  {
+    "pk": 15,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 1,
+      "name": "Potion",
+      "value": 5
+    }
+  },
+  {
+    "pk": 16,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 1,
+      "name": "Potion",
+      "value": 6
+    }
+  },
+  {
+    "pk": 17,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 1,
+      "name": "Potion",
+      "value": 7
+    }
+  },
+  {
+    "pk": 18,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 1,
+      "name": "Potion",
+      "value": 8
+    }
+  },
+  {
+    "pk": 19,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 1,
+      "name": "Potion",
+      "value": 9
+    }
+  },
+  {
+    "pk": 20,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 1,
+      "name": "Potion",
+      "value": 10
+    }
+  },
+
+  {
+    "pk": 21,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Rat",
+      "value": 2
+    }
+  },
+  {
+    "pk": 22,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Rat",
+      "value": 3
+    }
+  },
+  {
+    "pk": 23,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Snake",
+      "value": 4
+    }
+  },
+  {
+    "pk": 24,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Wolf",
+      "value": 5
+    }
+  },
+  {
+    "pk": 25,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Dire Wolf",
+      "value": 6
+    }
+  },
+  {
+    "pk": 26,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Skeleton",
+      "value": 7
+    }
+  },
+  {
+    "pk": 27,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Skeleton",
+      "value": 8
+    }
+  },
+  {
+    "pk": 28,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Skeleton",
+      "value": 9
+    }
+  },
+  {
+    "pk": 29,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Skeleton King",
+      "value": 10
+    }
+  },
+  {
+    "pk": 30,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Orc",
+      "value": 11
+    }
+  },
+  {
+    "pk": 31,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Orc",
+      "value": 12
+    }
+  },
+  {
+    "pk": 32,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Troll",
+      "value": 13
+    }
+  },
+  {
+    "pk": 33,
+    "model": "core.carddetail",
+    "fields": {
+      "kind": 2,
+      "name": "Ogre",
+      "value": 14
+    }
+  }
+]
