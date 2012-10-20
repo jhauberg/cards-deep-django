@@ -124,14 +124,12 @@ def draw_single(session, properties=None):
             details_id = get_random_monster_id_in_value_range(2, 14)
 
         if details_id is None:
-            raise Exception('did not determine details_id!')
-            #return None
+            return None
 
         try:
             properties = CardDetail.objects.get(pk=details_id)
         except CardDetail.DoesNotExist:
-            raise Exception('details_id ({0}) does not exist!'.format(details_id))
-            #return None
+            return None
 
     try:
         card = Card(
@@ -142,8 +140,7 @@ def draw_single(session, properties=None):
 
         card.save()
     except:
-        raise Exception('failed while creating card')
-        #return None
+        return None
 
     return card
 

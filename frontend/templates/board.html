@@ -1,6 +1,9 @@
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8" />
+
+        <title>Cards Deep</title>
 
         <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
 
@@ -10,13 +13,26 @@
 
         {% if state %}
 
-            {{ state.health }}<br />
+            <div class="board">
 
-            {% for card in state.stacks.0.cards %}
+                {{ state.health }}<br />
 
-                {{ card }}<br />
+                <ul class="stack" id="room">
 
-            {% endfor %}
+                    {% for card in state.stacks.0.cards %}
+
+                        <li class="card">
+
+                            {% include 'parts/card.html' with card=card only %}
+
+                        </li>
+
+                    {% endfor %}
+
+                </ul>
+
+                <div class="card" id="map" />
+            </div>
 
         {% endif %}
 

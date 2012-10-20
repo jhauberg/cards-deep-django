@@ -1,3 +1,57 @@
-.card {
-    
+.board {
+    margin-top: 128px;
+    width: 542px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.stack {
+    padding: 0px;
+    margin: 0px;
+}
+
+#room .card {
+    margin-right: 8px;
+    float: left;
+}
+
+#map {
+    float: right;
+}
+
+.card, .weapon, .potion, .monster, .scrap, .treasure {
+    background-image: url('../img/card-back.png');
+    background-repeat: no-repeat;
+    display: block;
+    width: 80px;
+    height: 106px;
+}
+
+.card .weapon {
+    background-image: url('../img/card-front-weapon.png');
+}
+
+.card .potion {
+    background-image: url('../img/card-front-potion.png');
+}
+
+.card .monster {
+    background-image: url('../img/card-front-monster.png');
+}
+
+.card .scrap {
+    background-image: url('../img/card-front-scrap.png');
+}
+
+.card .treasure {
+    background-image: url('../img/card-front-treasure.png');
+}
+
+.card .value {
+    color: white;
+    padding-top: 4px;
+    text-align: center;
+    font-family: 'Georgia';
+    font-weight: bold;
+    font-size: 32px;
 }

@@ -4,14 +4,19 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 from fields import PositiveSmallIntegerRangeField
-#from fields import CARD_KINDS
+
+CARD_KIND_WEAPON = 0
+CARD_KIND_POTION = 1
+CARD_KIND_MONSTER = 2
+CARD_KIND_SCRAP = 3
+CARD_KIND_TREASURE = 4
 
 CARD_KINDS = (
-    (0, 'Weapon'),
-    (1, 'Potion'),
-    (2, 'Monster'),
-    (3, 'Scrap'),
-    (4, 'Treasure'),
+    (CARD_KIND_WEAPON, 'Weapon'),
+    (CARD_KIND_POTION, 'Potion'),
+    (CARD_KIND_MONSTER, 'Monster'),
+    (CARD_KIND_SCRAP, 'Scrap'),
+    (CARD_KIND_TREASURE, 'Treasure'),
 )
 
 class Player(models.Model):

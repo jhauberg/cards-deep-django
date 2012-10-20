@@ -1,4 +1,4 @@
-from models import Player, Session, Card, CardDetail, Stack
+from models import Player, Session, Card, CardDetail, CARD_KINDS, Stack
 from rules import start
 
 def session_is_valid(request, session):
