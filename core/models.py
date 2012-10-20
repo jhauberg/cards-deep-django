@@ -4,8 +4,15 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 
 from fields import PositiveSmallIntegerRangeField
+#from fields import CARD_KINDS
 
-from rules import CARD_KINDS
+CARD_KINDS = (
+    (0, 'Weapon'),
+    (1, 'Potion'),
+    (2, 'Monster'),
+    (3, 'Scrap'),
+    (4, 'Treasure'),
+)
 
 class Player(models.Model):
     user = models.OneToOneField(User)

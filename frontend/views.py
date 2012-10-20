@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import logout as auth_logout, authenticate, login as auth_login
 
 from core.models import Player, Session
+from core.views import start_new_session, get_current_state
 
 def index(request):
     try:
@@ -82,10 +83,29 @@ def logout(request):
     return HttpResponseRedirect(next_path)
 
 def begin(request):
-    return HttpResponse('game started')
+    if request.method != 'POST':
+        return HttpResponse(status = 500)
+
+    session = start_new_session(request)
+
+    if session is None:
+        return HttpResponse(status = 500)
+
+    return HttpResponseRedirect('/play/%s' % (session.id))
 
 def resume(request, session_id):
-    return HttpResponse('game resumed')
+    state = get_current_state(request, session_id)
+
+    if state is None:
+        return HttpResponse(status = 500)
+
+    return render(
+        request,
+        'board.html', {
+            'session_id': int(session_id),
+            'state': state
+        }
+    )
 
 def preferences(request):
     return HttpResponse('your preferences')

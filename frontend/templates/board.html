@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    </head>
+    <body>
+
+        {% if state %}
+
+            {{ state.health }}<br />
+
+            {% for card in state.stacks.0.cards %}
+
+                {{ card }}<br />
+
+            {% endfor %}
+
+        {% endif %}
+
+    </body>
+</html>
