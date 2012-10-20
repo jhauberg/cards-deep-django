@@ -1,0 +1,67 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+
+        <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    </head>
+    <body>
+
+    <form action="{% url register %}" method="post" onSubmit="return validates();">
+        {% csrf_token %}
+
+        Username*
+        <div id="UsernameError"></div>
+        <input type="text" placeholder="e.g. batman" name="username" id="username" />
+        
+        Password*
+        <div id="PwError"></div>
+        <input type="password" placeholder="Something you can remember..." name="password" id="password" />
+        
+        Verify password*
+        <div id="PWVerError"></div>
+        <input type="password" placeholder="Repeat from above..." name="verPass" id="verPass" />
+        
+        E-mail
+        <input type="text" placeholder="e.g. batman@gothamcity.com" name="email" id="email"  />
+        
+        <input type="submit" value="Hook me up!" />
+    </form>
+
+    <script type="text/javascript">
+        function validates()
+        {
+            var passwordVal = $("#password").val();
+            var checkVal = $("#verPass").val();
+            var usernameVal = $("#username").val();
+            var noError = true;
+
+            $("#PWVerError").html("");
+            $("#UsernameError").html("");
+            $("#PwError").html("");
+
+            if(passwordVal != checkVal)
+            {
+                $("#PWVerError").html("<font color='red'>Password do not match.</font>");
+                noError = false;
+            }
+                
+            if(usernameVal.length < 1)
+            {
+                $("#UsernameError").html("<font color='red'>Please input a username.</font>");
+                noError = false;
+            }
+
+            if(passwordVal.length < 6)
+            {
+                $("#PwError").html("<font color='red'>Please input a password longer than 6 characters.</font>");
+                noError = false;
+            }
+
+            return noError;
+        }
+    </script>
+
+    </body>
+</html>

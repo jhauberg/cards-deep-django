@@ -1,6 +1,8 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render_to_response, render
 from django.conf import settings
+from django.contrib.auth.models import User
+from django.contrib.auth import logout as auth_logout, authenticate, login as auth_login
 
 from core.models import Player, Session
 
@@ -18,22 +20,72 @@ def index(request):
     )
 
 def register(request):
-    return HttpResponse('sign up to play')
+    if request.method == 'GET':
+        return render(
+            request, 
+            'register.html')
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        email = request.POST['email']
+
+        try:
+            user = User.objects.create_user(
+                username, email, password)
+        except Exception, e:
+            return HttpResponse(status = 500)
+        else:
+            login(request)
+
+        return HttpResponseRedirect('/')
+
+    return HttpResponse(status = 500)
 
 def login(request):
-    return HttpResponse('logged in')
+    if request.method == 'GET':
+        return render(
+            request, 
+            'login.html')
+
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user = authenticate(
+            username = username, 
+            password = password)
+
+        if user is None:
+            return HttpResponse(status = 500)
+
+        if user.is_active:
+            auth_login(request, user)
+            
+            next_path = request.GET.get('next', None)
+
+            if next_path is None:
+                next_path = '/'
+
+            return HttpResponseRedirect(next_path)
+    
+    return HttpResponse(status = 500)
 
 def logout(request):
-    return HttpResponse('logged out')
+    auth_logout(request)
+
+    next_path = request.GET.get('next', None)
+
+    if next_path is None:
+        next_path = '/'
+
+    return HttpResponseRedirect(next_path)
 
 def begin(request):
     return HttpResponse('game started')
 
 def resume(request, session_id):
     return HttpResponse('game resumed')
-
-def end(request):
-    return HttpResponse('game ended')
 
 def preferences(request):
     return HttpResponse('your preferences')
