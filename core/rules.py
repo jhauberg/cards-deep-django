@@ -8,7 +8,7 @@ def roll(min, max):
 def get_random_card_id_in_value_range(min, max, offset):
     card_id = roll(
         min + offset, 
-        max + offset + 1) # + 1 to adjust for exclusive max in random function.
+        max + offset)
 
     return card_id
 
@@ -88,14 +88,16 @@ def start(player):
 def draw_single(session, properties=None):
     """
     Attempts drawing a single card.
-    Can optionally be given specific properties; otherwise determined randomly.
+    Can optionally be given specific properties, determined randomly otherwise.
     """
-    if not session:
+    if session is None:
         return None
 
     if properties is None:
         card_should_be_beneficial = roll(0, 100) >= 60 # 40 chance of not being a monster card
         card_should_be_special = roll(0, 100) >= 95    # 5% chance of being special
+
+        details_id = None
 
         if card_should_be_beneficial:
             luck = roll(0, 100)
@@ -121,13 +123,15 @@ def draw_single(session, properties=None):
             # Monster (2-14)
             details_id = get_random_monster_id_in_value_range(2, 14)
 
-        if not details_id:
-            return None
+        if details_id is None:
+            raise Exception('did not determine details_id!')
+            #return None
 
         try:
             properties = CardDetail.objects.get(pk=details_id)
         except CardDetail.DoesNotExist:
-            return None
+            raise Exception('details_id ({0}) does not exist!'.format(details_id))
+            #return None
 
     try:
         card = Card(
@@ -138,7 +142,8 @@ def draw_single(session, properties=None):
 
         card.save()
     except:
-        return None
+        raise Exception('failed while creating card')
+        #return None
 
     return card
 
@@ -146,7 +151,7 @@ def draw(session, amount):
     """
     Attempts drawing a specific amount of cards.
     """
-    if not session:
+    if session is None:
         return None
 
     if amount <= 0:
