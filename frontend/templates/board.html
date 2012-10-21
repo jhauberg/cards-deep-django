@@ -2,7 +2,7 @@
 
 <!DOCTYPE html>
 <html>
-    
+
     {% include 'parts/boilerplate/head.html' %}
 
     <body>
@@ -27,84 +27,15 @@
 
                 </ul>
 
-                <div class="stack" id="map">
-                    <div class="card" id="map-bottom"></div>
-                    <div class="card" id="map-top"></div>
-                </div>
+                <ul class="stack" id="map">
+                    <li class="card" id="map-bottom"></li>
+                    <li class="card" id="map-top"></li>
+                </ul>
             </div>
 
         {% endif %}
 
-        <script type="text/javascript">
-            $("#room .card").mouseenter(
-              function(){
-                $(this).animate({
-                        marginTop: '12px'
-                    }, {
-                        duration: 400,
-                        specialEasing: {
-                          width: 'linear',
-                          height: 'easeOutBounce'
-                        }
-                    }
-                );
-              }
-            );
-
-            $("#room .card").mouseleave(
-              function() {
-                $(this).animate({
-                        marginTop: '0px'
-                    }, {
-                        duration: 150,
-                        specialEasing: {
-                          width: 'linear',
-                          height: 'easeOutBounce'
-                        }
-                    }
-                );
-              }
-            );
-        </script>
-
-        <script type="text/javascript">
-            $("#map").mouseenter(
-              function(){
-                $('#map-bottom').animate({
-                        left: '8px'
-                    }, {
-                        duration: 300,
-                        specialEasing: {
-                          width: 'linear',
-                          height: 'easeOutBounce'
-                        }
-                    }
-                );
-              }
-            );
-
-            $("#map").mouseleave(
-              function() {
-                $('#map-bottom').animate({
-                        left: '0px'
-                    }, {
-                        duration: 200,
-                        specialEasing: {
-                          width: 'linear',
-                          height: 'easeOutBounce'
-                        }
-                    }
-                );
-              }
-            );
-        </script>
-
-        <script type="text/javascript">
-            $("#map").click(function() {
-                    $('#map').append('<div class="card monster" id="new-card"></div>');
-                }
-            );
-        </script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/game.js"></script>
 
     </body>
 </html>
