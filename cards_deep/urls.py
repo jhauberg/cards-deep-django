@@ -10,3 +10,8 @@ urlpatterns = patterns('frontend.views',
     url(r'^profile/$', 'preferences', name='preferences'),
     url(r'^profile/(?P<player_id>\d+)/$', 'profile', name='profile'),
 )
+
+#dunno man
+# urlpatterns += patterns('core.views',
+#     url(r'^rules/$', 'can_skip', name='can_skip'),
+# )

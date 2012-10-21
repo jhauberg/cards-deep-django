@@ -17,6 +17,7 @@
     "model": "core.carddetail",
     "fields": {
       "kind": 3,
+      "value": 1,
       "name": "Scrap"
     }
   },
@@ -25,6 +26,7 @@
     "model": "core.carddetail",
     "fields": {
       "kind": 4,
+      "value": 1,
       "name": "Treasure"
     }
   },

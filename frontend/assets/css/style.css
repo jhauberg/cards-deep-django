@@ -25,6 +25,7 @@
 .card {
     background-image: url('../img/card-back.png');
     background-repeat: no-repeat;
+    position: relative;
     display: block;
     width: 80px;
     height: 106px;
@@ -87,4 +88,15 @@
  */
 #map {
     float: right;
+}
+
+#map-bottom {
+    float: left;
+    opacity: 0.25;
+    position: relative;
+}
+
+#map-top {
+    float: left;
+    position: absolute;
 }
