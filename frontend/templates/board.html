@@ -1,14 +1,10 @@
+{% load core_helpers %}
+
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
+    
+    {% include 'parts/boilerplate/head.html' %}
 
-        <title>Cards Deep</title>
-
-        <link href="{{ STATIC_URL }}css/style.css" rel="stylesheet">
-
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    </head>
     <body>
 
         {% if state %}
@@ -21,7 +17,7 @@
 
                     {% for card in state.stacks.0.cards %}
 
-                        <li class="card">
+                        <li class="card {{ card.details.kind|kind_name }}">
 
                             {% include 'parts/card.html' with card=card only %}
 

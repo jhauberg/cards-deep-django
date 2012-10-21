@@ -1,8 +1,6 @@
-{% load core_helpers %}
-
 {% if card %}
 
-    <div class="{{ card.details.kind|kind_name }}">
+    <div class="card-front">
         <div class="value">
 
             {% if card.details.value %}
