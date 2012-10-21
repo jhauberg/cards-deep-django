@@ -5,7 +5,7 @@
 
             {% if card.details.value %}
 
-                {{ card.details.value }}
+                {{ card.details.value }}{% if card.is_special %}*{% endif %}
                 
             {% endif %}
 

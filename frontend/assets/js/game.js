@@ -2,7 +2,7 @@ function selectCardInRoom(element, selected) {
     var amount = selected ? '12px' : '0px';
 
     $(element).stop().animate({
-            marginTop: amount
+            top: amount
         }, 'fast'
     );
 }

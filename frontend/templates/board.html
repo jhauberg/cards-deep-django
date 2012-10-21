@@ -11,8 +11,6 @@
 
             <div class="board">
 
-                {{ state.health }}<br />
-
                 <ul class="stack" id="room">
 
                     {% for card in state.stacks.0.cards %}
@@ -31,6 +29,16 @@
                     <li class="card" id="map-bottom"></li>
                     <li class="card" id="map-top"></li>
                 </ul>
+
+                <div class="health">
+                    <div class="health-ui">
+                        <div class="value">
+                            {{ state.health }}
+                        </div>
+                    </div>
+                    <div class="health-bar">
+                    </div>
+                </div>
             </div>
 
         {% endif %}

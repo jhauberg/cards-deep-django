@@ -74,6 +74,45 @@
     font-size: 32px;
 }
 
+.health {
+    position: relative;
+    top: 200px;
+}
+
+.health-ui {
+    background-image: url('../img/ui-health.png');
+    background-repeat: no-repeat;
+    position: relative;
+    margin-right: 4px;
+    float: left;
+    width: 66px;
+    height: 29px;
+}
+
+.health-ui .value {
+    color: white;
+    text-align: right;
+    width: 100%;
+    right: 8px;
+    position: absolute;
+    font-family: 'Georgia';
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.health-bar {
+    background-image: url('../img/ui-health-bar_frame.png');
+    background-repeat: no-repeat;
+    position: relative;
+    float: left;
+    width: 178px;
+    height: 29px;
+}
+
+.health-bar .value {
+
+}
+
 /**
  * All cards in the room stack are laid out from left to right.
  */
