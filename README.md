@@ -6,7 +6,7 @@ CURRENTLY NOT PLAYABLE!
 
 # Cards Deep
 
-A web-based implementation of a fast-paced card game. Made using **django**. 
+A web-based implementation of a [fast-paced card game](https://github.com/shrt/cards-deep-ruleset). Python and Django. 
 
 It's supposed to end up looking something like this:
 
@@ -22,7 +22,7 @@ But that also means that the game has to be installed with a database and hosted
 
 ### Install
 
-To get the game up and running, you need to have `Python` and `Django` installed. After that you just go:
+To get the game up and running, you need to have `python` and `django` installed. After that you just go:
 
     $ cd cards-deep-django
 
