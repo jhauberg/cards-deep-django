@@ -176,7 +176,10 @@ def perform_action(request, session_id, action_type):
             elif action_type == 'clear':
                 success = perform_clear_action(request, session)
 
+    state = get_current_state(request, session_id)
+
     return render_to_json({
+            'state': state,
             'success': success
         })
 

@@ -21,14 +21,18 @@ function selectMap(selected) {
 
 var state = {}
 
-function refresh() {
-    $.get("{% url state state.session_id %}", 
-        { },
-        function(response) {
-            state = response;
-        },
-        'json'
-    );
+function refresh(newState) {
+    if (newState) {
+        state = newState;
+    } else {
+        $.get("{% url state state.session_id %}", 
+            { },
+            function(response) {
+                state = response;
+            },
+            'json'
+        );
+    }
 }
 
 $("#room .card").mouseenter(
@@ -66,7 +70,7 @@ $("#map").click(
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
             },
             function(response) {
-                refresh();
+                refresh(response.state);
             },
             'json'
         );
