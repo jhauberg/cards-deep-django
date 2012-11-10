@@ -102,7 +102,6 @@ def resume(request, session_id):
     return render(
         request,
         'board.html', {
-            'session_id': int(session_id),
             'state': state
         }
     )

@@ -162,8 +162,7 @@ class Stack(models.Model):
 
     def pop(self):
         try:
-            top_card = self.get_top()
-            self.pop_specific(top_card)
+            self.pop_specific(self.get_top())
         except:
             return False
 

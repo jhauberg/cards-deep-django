@@ -17,5 +17,6 @@ urlpatterns = patterns('frontend.views',
 # )
 
 urlpatterns += patterns('core.views',
+    url(r'^play/(?P<session_id>\d+)/state/$', view='state', name='state'),
     url(r'^play/(?P<session_id>\d+)/action/(?P<action_type>\w+)/$', view='perform_action', name='perform_action'),
 )

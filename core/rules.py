@@ -10,6 +10,8 @@ import random
 def roll(min, max):
     return random.randint(min, max)
 
+REQUIRED_TURNS_BEFORE_SKIPPING = 5
+
 def get_random_card_id_in_value_range(min, max, offset):
     card_id = roll(
         min + offset, 
@@ -478,7 +480,7 @@ def can_skip_on_next_move(session):
     if session is None:
         return False
 
-    if (session.amount_of_cards_moved_since_last_skip == 4):
+    if (session.amount_of_cards_moved_since_last_skip == REQUIRED_TURNS_BEFORE_SKIPPING - 1):
         return True
 
     return False
@@ -491,7 +493,7 @@ def can_skip(session):
         return False
 
     if (session.amount_of_cards_moved_since_last_skip == -1 or 
-        session.amount_of_cards_moved_since_last_skip >= 5):
+        session.amount_of_cards_moved_since_last_skip >= REQUIRED_TURNS_BEFORE_SKIPPING):
         return True
 
     return False

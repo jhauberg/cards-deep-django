@@ -1,5 +1,5 @@
 from models import Player, Session, Card, CardDetail, CARD_KINDS, Stack
-from rules import start, skip
+from rules import start, skip, can_skip, can_skip_on_next_move
 
 from django.http import HttpResponse
 
@@ -60,7 +60,10 @@ def current_state(session):
     current_forge_cards = list(session.forge_stack.get_all_cards())
 
     return {
+        'session_id': session.id,
         'health': int(session.health),
+        'can_skip': can_skip(session),
+        'can_skip_on_next_move': can_skip_on_next_move(session),
         'stacks': [
             { 'name': 'room', 'id': session.room_stack.id, 'cards': current_room_cards },
             { 'name': 'equipment', 'id': session.equipment_stack.id, 'cards': current_equipment_cards },
@@ -176,3 +179,11 @@ def perform_action(request, session_id, action_type):
     return render_to_json({
             'success': success
         })
+
+def state(request, session_id):
+    state = get_current_state(request, session_id)
+
+    if state is None:
+        state = {}
+
+    return render_to_json(state)
