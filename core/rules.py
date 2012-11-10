@@ -1,3 +1,7 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
 from models import Player, Session, Card, CardDetail, Stack
 from models import CARD_KIND_WEAPON, CARD_KIND_POTION, CARD_KIND_MONSTER, CARD_KIND_SCRAP, CARD_KIND_TREASURE
 
@@ -160,7 +164,7 @@ def draw(session, amount):
     for i in range(0, amount):
         card = draw_single(session)
 
-        if card:
+        if card is not None:
             cards.append(card)
 
     return cards
@@ -399,12 +403,15 @@ def move(session, card, to_stack):
         return False
 
     if not card.can_be_moved(to_stack):
+        logger.error(' * card can not be moved!')
         return False
 
     if not can_move(session, card, to_stack):
+        logger.error(' * could not allow moving card!')
         return False
 
     if not to_stack.push(card):
+        logger.error(' * could not push card on stack!')
         return False
 
     if to_stack == session.room_stack:
@@ -412,10 +419,13 @@ def move(session, card, to_stack):
             session.amount_of_cards_moved_since_last_skip += 1
             session.save()
         except:
+            logger.error(' * could not increment "cards_moved_since_last_skip"!')
             return False
 
-    if not activate_card(session, card):
-        return False
+    if to_stack != session.discard_stack:
+        if not activate_card(session, card):
+            logger.error(' * could not activate card!')
+            return False
 
     return True
 
@@ -426,11 +436,15 @@ def discard(session, card):
     if session is None:
         return False
 
+    logger.info('  trying to move %s to "discard_stack"' % (card))
+
     if move(session, card, session.discard_stack):
+        logger.info('    success!')
         all_discarded_cards = session.discard_stack.get_all_cards()
 
         if all_discarded_cards.count() >= 10:
             oldest_discarded_card = all_discarded_cards.reverse()[:1]
+
             oldest_discarded_card.stack = None
             oldest_discarded_card.save()
 
@@ -448,8 +462,12 @@ def discard_many(session, cards):
     amount_discarded = 0
 
     for card in cards:
+        logger.info('discarding %s' % (card))
         if discard(session, card):
+            logger.info('  success!')
             amount_discarded += 1
+        else:
+            logger.info('  fail!')
 
     return amount_discarded
 
@@ -487,17 +505,19 @@ def skip(session):
 
     if can_skip(session):
         room_cards = session.room_stack.get_all_cards()
+        logger.info('skipping %d cards...' % (len(room_cards)))
         amount_discarded = discard_many(session, room_cards)
+        logger.info('discarded %d cards!' % (amount_discarded))
 
         if amount_discarded > 0:
             replacement_cards = draw(session, amount_discarded)
+            logger.info('%d new cards were drawn...' % (len(replacement_cards)))
             session.room_stack.push_many(replacement_cards)
 
         try:
             session.amount_of_cards_moved_since_last_skip = 0
             session.save()
         except:
-            # This would be bad :S Cards probably were drawn and attached.. so needs some cleanup code here
             return False
 
         return True
