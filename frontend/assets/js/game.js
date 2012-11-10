@@ -42,8 +42,3 @@ $("#map").mouseleave(
         selectMap(false);
     }
 );
-
-$("#map").click(function() {
-        //$('#map').append('<div class="card monster" id="new-card"></div>');
-    }
-);

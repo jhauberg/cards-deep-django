@@ -15,3 +15,7 @@ urlpatterns = patterns('frontend.views',
 # urlpatterns += patterns('core.views',
 #     url(r'^rules/$', 'can_skip', name='can_skip'),
 # )
+
+urlpatterns += patterns('core.views',
+    url(r'^play/(?P<session_id>\d+)/action/(?P<action_type>\w+)/$', view='perform_action', name='perform_action'),
+)

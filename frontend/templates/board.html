@@ -44,6 +44,20 @@
         {% endif %}
 
         <script type="text/javascript" src="{{ STATIC_URL }}js/game.js"></script>
-
+        <script type="text/javascript">
+            $("#map").click(
+                function() {
+                    $.post("{% url perform_action session_id 'skip' %}", 
+                        { 
+                            'csrfmiddlewaretoken': '{{ csrf_token }}'
+                        },
+                        function(response) {
+                            console.log(response);
+                        },
+                        'json'
+                    );
+                }
+            );
+        </script>
     </body>
 </html>
