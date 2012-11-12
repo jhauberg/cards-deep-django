@@ -310,7 +310,7 @@ def activate_card(session, card):
             except:
                 return False
 
-        damage = card.value
+        damage = card.details.value
 
         if damage:
             if most_recently_played_weapon_card:
@@ -342,29 +342,35 @@ def can_move(session, card, to_stack):
 
     if to_stack == session.room_stack:
         # you can't move cards to the room...
+        logger.error(' * card can not be moved to the room!')
         return False
 
     if to_stack == session.treasure_stack:
         if card.details.kind is not CARD_KIND_TREASURE:
             # Not a treasure card, bail out...
+            logger.error(' * only treasure cards can be moved here!')
             return False
 
         if len(session.treasure_stack.get_all_cards()) >= 10:
             # Treasure stack already holds maximum amount of treasure
+            logger.error(' * max treasure reached!')
             return False
     
     if to_stack == session.forge_stack:
         if card.details.kind is not CARD_KIND_SCRAP:
             # Not a scrap card, bail out...
+            logger.error(' * only scrap cards can be moved here!')
             return False
 
         if len(session.forge_stack.get_all_cards()) >= 10:
             # Forge stack already holds maximum amount of scraps
+            logger.error(' * max scraps reached!')
             return False
     
     if to_stack == session.equipment_stack:
         if card.details.kind is not CARD_KIND_WEAPON:
             # Not a weapon card, bail out...
+            logger.error(' * only weapon cards can be moved here!')
             return False
 
         most_recently_played_weapon_card = session.equipment_stack.get_top()
@@ -372,11 +378,13 @@ def can_move(session, card, to_stack):
         if most_recently_played_weapon_card is not None:
             if not card.is_special:
                 # Only special cards can be placed on top of the previous weapon as a score multiplier.
+                logger.error(' * only special cards can do this!')
                 return False
     
     if to_stack == session.you_stack:
-        if card.details.kind is not CARD_KIND_MONSTER or card.details.kind is not CARD_KIND_POTION:
+        if card.details.kind is not CARD_KIND_MONSTER and card.details.kind is not CARD_KIND_POTION:
             # Only monsters or potions can be placed here
+            logger.error(' * only monster cards can be moved here!')
             return False
 
         if card.details.kind is CARD_KIND_MONSTER:
@@ -390,6 +398,7 @@ def can_move(session, card, to_stack):
                     if most_recently_played_weapon_card and not most_recently_played_weapon_card.is_special:
                         # Basically, you can only place monsters of higher value on other monsters if
                         # the current weapon is special.
+                        logger.error(' * requires special weapon equipped to do this!')
                         return False
 
     return True
@@ -412,11 +421,18 @@ def move(session, card, to_stack):
         logger.error(' * could not allow moving card!')
         return False
 
+    from_stack = card.stack
+
     if not to_stack.push(card):
         logger.error(' * could not push card on stack!')
         return False
 
-    if to_stack == session.room_stack:
+    if to_stack != session.discard_stack:
+        if not activate_card(session, card):
+            logger.error(' * could not activate card!')
+            return False
+
+    if from_stack == session.room_stack:
         try:
             session.amount_of_cards_moved_since_last_skip += 1
             session.save()
@@ -424,9 +440,12 @@ def move(session, card, to_stack):
             logger.error(' * could not increment "cards_moved_since_last_skip"!')
             return False
 
-    if to_stack != session.discard_stack:
-        if not activate_card(session, card):
-            logger.error(' * could not activate card!')
+        try:
+            new_card = draw_single(session)
+
+            session.room_stack.push(new_card);
+        except:
+            logger.error(' * could not draw and push new card to room!')
             return False
 
     return True

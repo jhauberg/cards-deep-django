@@ -95,6 +95,12 @@ class Card(models.Model):
         else:
             return u'%s' % (self.details)
 
+def get_first_element(iterable, default=None):
+    if iterable:
+        for item in iterable:
+            return item
+    return default
+
 class Stack(models.Model):
     # todo: orderby! a stack is not just a pile of cards, it's a list of cards in a specific order 
     # cards probably need to have a field that specified this order, because cards can be put
@@ -114,10 +120,10 @@ class Stack(models.Model):
         return False
 
     def get_bottom(self):
-        return Card.objects.filter(stack=self).reverse()[:1]
+        return get_first_element(Card.objects.filter(stack=self).reverse()[:1])
 
     def get_top(self):
-        return Card.objects.filter(stack=self)[:1]
+        return get_first_element(Card.objects.filter(stack=self)[:1])
 
     def get_all_cards(self):
         return Card.objects.filter(stack=self)

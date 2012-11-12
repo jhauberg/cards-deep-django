@@ -1,7 +1,11 @@
 from models import Player, Session, Card, CardDetail, CARD_KINDS, Stack
-from rules import start, skip, can_skip, can_skip_on_next_move
+from rules import start, skip, can_skip, can_skip_on_next_move, move
 
 from django.http import HttpResponse
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 import json
 
