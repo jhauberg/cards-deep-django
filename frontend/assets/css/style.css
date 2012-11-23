@@ -100,17 +100,23 @@
     font-size: 18px;
 }
 
-.health-bar {
+.health-bar-frame {
     background-image: url('../img/ui-health-bar_frame.png');
     background-repeat: no-repeat;
     position: relative;
     float: left;
-    width: 178px;
+    padding: 5px 6px 5px 6px;
+    width: 132px;
     height: 29px;
 }
 
-.health-bar .value {
-
+.health-bar {
+    background-image: url('../img/ui-health-bar.png');
+    background-repeat: repeat-x;
+    position: relative;
+    float: left;
+    width: 120px;
+    height: 19px;
 }
 
 /**
