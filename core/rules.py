@@ -2,22 +2,25 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from models import Player, Session, Card, CardDetail, Stack
+from models import Session, Card, CardDetail, Stack
 from models import CARD_KIND_WEAPON, CARD_KIND_POTION, CARD_KIND_MONSTER, CARD_KIND_SCRAP, CARD_KIND_TREASURE
 
 import random
 
+REQUIRED_TURNS_BEFORE_SKIPPING = 5
+
+
 def roll(min, max):
     return random.randint(min, max)
 
-REQUIRED_TURNS_BEFORE_SKIPPING = 5
 
 def get_random_card_id_in_value_range(min, max, offset):
     card_id = roll(
-        min + offset, 
+        min + offset,
         max + offset)
 
     return card_id
+
 
 def get_random_weapon_id_in_value_range(min, max):
     if min < 2 or max > 10:
@@ -25,11 +28,13 @@ def get_random_weapon_id_in_value_range(min, max):
 
     return get_random_card_id_in_value_range(min, max, 1)
 
+
 def get_random_potion_id_in_value_range(min, max):
     if min < 2 or max > 10:
         return None
 
     return get_random_card_id_in_value_range(min, max, 10)
+
 
 def get_random_monster_id_in_value_range(min, max):
     if min < 2 or max > 14:
@@ -37,13 +42,14 @@ def get_random_monster_id_in_value_range(min, max):
 
     return get_random_card_id_in_value_range(min, max, 19)
 
+
 def start(player):
     """
     Attempts creating a new game session for the given player.
     """
     if player is None:
         return None
-        
+
     # Initialize all the stacks.
     room_stack = Stack()
     room_stack.save()
@@ -65,17 +71,17 @@ def start(player):
 
     # Begin a new session.
     session = Session(
-        # Important to note that a session has to be tied to a player. Same goes for 
-        # cards and stacks; they must, ultimately, be tied to a session. Otherwise 
+        # Important to note that a session has to be tied to a player. Same goes for
+        # cards and stacks; they must, ultimately, be tied to a session. Otherwise
         # it would be possible to move cards between sessions.
-        belongs_to_player = player,
+        belongs_to_player=player,
 
-        room_stack = room_stack, 
-        you_stack = you_stack, 
-        equipment_stack = equipment_stack, 
-        forge_stack = forge_stack,
-        treasure_stack = treasure_stack,
-        discard_stack = discard_stack
+        room_stack=room_stack,
+        you_stack=you_stack,
+        equipment_stack=equipment_stack,
+        forge_stack=forge_stack,
+        treasure_stack=treasure_stack,
+        discard_stack=discard_stack
     )
 
     session.save()
@@ -92,6 +98,7 @@ def start(player):
 
     return session
 
+
 def draw_single(session, properties=None):
     """
     Attempts drawing a single card.
@@ -101,8 +108,8 @@ def draw_single(session, properties=None):
         return None
 
     if properties is None:
-        card_should_be_beneficial = roll(0, 100) >= 60 # 40 chance of not being a monster card
-        card_should_be_special = roll(0, 100) >= 95    # 5% chance of being special
+        card_should_be_beneficial = roll(0, 100) >= 60  # 40 chance of not being a monster card
+        card_should_be_special = roll(0, 100) >= 95     # 5% chance of being special
 
         details_id = None
 
@@ -140,7 +147,7 @@ def draw_single(session, properties=None):
 
     try:
         card = Card(
-            belongs_to_session=session, 
+            belongs_to_session=session,
             details=properties,
             is_special=card_should_be_special
         )
@@ -150,6 +157,7 @@ def draw_single(session, properties=None):
         return None
 
     return card
+
 
 def draw(session, amount):
     """
@@ -170,6 +178,7 @@ def draw(session, amount):
             cards.append(card)
 
     return cards
+
 
 def can_activate_stack(session, stack):
     """
@@ -206,9 +215,10 @@ def can_activate_stack(session, stack):
 
             # todo: should forged cards always be special? (this means you can always override the current stack! potential game changer)
             if not session.equipment_stack.is_empty():
-                return False    
+                return False
 
     return True
+
 
 def activate_stack(session, stack):
     """
@@ -226,8 +236,7 @@ def activate_stack(session, stack):
 
     if stack == session.forge_stack:
         # Draw a new weapon card that is valued depending on how many cards were spent.
-        # value = session.forge_stack.count()
-        
+
         # Attempt discarding all cards that were spent creating a weapon.
         value = discard_many(session, session.forge_stack.get_all_cards())
 
@@ -254,6 +263,7 @@ def activate_stack(session, stack):
 
     return True
 
+
 def can_activate_card(session, card):
     """
     Determines whether a card has properties that allow it to be activated.
@@ -271,11 +281,12 @@ def can_activate_card(session, card):
             # Can only be activated when placed on the You stack.
             return False
 
-    return True    
+    return True
+
 
 def activate_card(session, card):
     """
-    Attempts activating a card. 
+    Attempts activating a card.
     This usually occurs when a card has been successfully moved from the current room.
     """
     if not session or not card:
@@ -298,7 +309,7 @@ def activate_card(session, card):
             session.save()
         except:
             return False
-    
+
     if card.details.kind is CARD_KIND_MONSTER:
         most_recently_played_weapon_card = session.equipment_stack.get_top()
 
@@ -331,12 +342,13 @@ def activate_card(session, card):
 
     return True
 
+
 def can_move(session, card, to_stack):
     """
     Determines whether a card can be moved to a given stack.
     """
-    if (not session or 
-        not card or 
+    if (not session or
+        not card or
         not to_stack):
         return False
 
@@ -355,7 +367,7 @@ def can_move(session, card, to_stack):
             # Treasure stack already holds maximum amount of treasure
             logger.error(' * max treasure reached!')
             return False
-    
+
     if to_stack == session.forge_stack:
         if card.details.kind is not CARD_KIND_SCRAP:
             # Not a scrap card, bail out...
@@ -366,7 +378,7 @@ def can_move(session, card, to_stack):
             # Forge stack already holds maximum amount of scraps
             logger.error(' * max scraps reached!')
             return False
-    
+
     if to_stack == session.equipment_stack:
         if card.details.kind is not CARD_KIND_WEAPON:
             # Not a weapon card, bail out...
@@ -380,7 +392,7 @@ def can_move(session, card, to_stack):
                 # Only special cards can be placed on top of the previous weapon as a score multiplier.
                 logger.error(' * only special cards can do this!')
                 return False
-    
+
     if to_stack == session.you_stack:
         if card.details.kind is not CARD_KIND_MONSTER and card.details.kind is not CARD_KIND_POTION:
             # Only monsters or potions can be placed here
@@ -402,6 +414,7 @@ def can_move(session, card, to_stack):
                         return False
 
     return True
+
 
 def move(session, card, to_stack):
     """
@@ -443,12 +456,13 @@ def move(session, card, to_stack):
         try:
             new_card = draw_single(session)
 
-            session.room_stack.push(new_card);
+            session.room_stack.push(new_card)
         except:
             logger.error(' * could not draw and push new card to room!')
             return False
 
     return True
+
 
 def discard(session, card):
     """
@@ -473,6 +487,7 @@ def discard(session, card):
 
     return False
 
+
 def discard_many(session, cards):
     """
     Attempts discarding several cards at once.
@@ -492,6 +507,7 @@ def discard_many(session, cards):
 
     return amount_discarded
 
+
 def can_skip_on_next_move(session):
     """
     Determines whether a game can have its current room skipped on the following turn.
@@ -504,6 +520,7 @@ def can_skip_on_next_move(session):
 
     return False
 
+
 def can_skip(session):
     """
     Determines whether a game can have its current room skipped or not.
@@ -511,11 +528,12 @@ def can_skip(session):
     if session is None:
         return False
 
-    if (session.amount_of_cards_moved_since_last_skip == -1 or 
+    if (session.amount_of_cards_moved_since_last_skip == -1 or
         session.amount_of_cards_moved_since_last_skip >= REQUIRED_TURNS_BEFORE_SKIPPING):
         return True
 
     return False
+
 
 def skip(session):
     """

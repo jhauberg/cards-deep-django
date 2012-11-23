@@ -1,5 +1,5 @@
-from models import Player, Session, Card, CardDetail, CARD_KINDS, Stack
-from rules import start, skip, can_skip, can_skip_on_next_move, move
+from models import Player, Session, Card, Stack
+from rules import start, skip, can_skip, can_skip_on_next_move, move, activate_stack
 
 from django.http import HttpResponse
 
@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 import json
 
 RESPONSE_MIME_TYPE = 'application/javascript'
+
 
 def encode(obj):
     if isinstance(obj, Card):
@@ -28,20 +29,22 @@ def encode(obj):
     else:
         raise TypeError(repr(obj) + " is not JSON serializablelelele")
 
+
 def render_to_json(data):
     return HttpResponse(
-        json.dumps(data, 
-            default=encode, 
-            sort_keys=True, 
+        json.dumps(data,
+            default=encode,
+            sort_keys=True,
             indent=2),
         mimetype=RESPONSE_MIME_TYPE)
+
 
 def session_is_valid(request, session):
     if not session:
         return False
 
     try:
-        player = Player.objects.get(pk = request.user.id)
+        player = Player.objects.get(pk=request.user.id)
     except Player.DoesNotExist:
         return False
 
@@ -49,6 +52,7 @@ def session_is_valid(request, session):
         return False
 
     return True
+
 
 def current_state(session):
     """
@@ -77,14 +81,10 @@ def current_state(session):
         ]
     }
 
+
 def get_current_state(request, session_id):
     try:
-        player = Player.objects.get(pk = request.user.id)
-    except Player.DoesNotExist:
-        return None
-
-    try:
-        session = Session.objects.get(pk = session_id)
+        session = Session.objects.get(pk=session_id)
     except Session.DoesNotExist:
         return None
 
@@ -95,23 +95,25 @@ def get_current_state(request, session_id):
 
     return state
 
+
 def start_new_session(request):
     try:
-        player = Player.objects.get(pk = request.user.id)
+        player = Player.objects.get(pk=request.user.id)
     except Player.DoesNotExist:
         player = None
 
     session = None
 
     if player is not None:
-        session = start(player)       
+        session = start(player)
 
     return session
+
 
 def perform_move_action(request, session):
     if request.method != 'POST':
         return False
-    
+
     try:
         card_id = request.POST.get('card_id')
         to_stack_id = request.POST.get('to_stack_id')
@@ -119,7 +121,7 @@ def perform_move_action(request, session):
         return False
 
     try:
-        card = Card.objects.get(pk = card_id)
+        card = Card.objects.get(pk=card_id)
     except Card.DoesNotExist:
         return False
 
@@ -127,7 +129,7 @@ def perform_move_action(request, session):
         return False
 
     try:
-        to_stack = Stack.objects.get(pk = to_stack_id)
+        to_stack = Stack.objects.get(pk=to_stack_id)
     except Stack.DoesNotExist:
         return False
 
@@ -135,6 +137,7 @@ def perform_move_action(request, session):
         return False
 
     return move(session, card, to_stack)
+
 
 def perform_clear_action(request, session):
     if request.method != 'POST':
@@ -146,24 +149,26 @@ def perform_clear_action(request, session):
         return False
 
     try:
-        stack = Stack.objects.get(pk = stack_id)
+        stack = Stack.objects.get(pk=stack_id)
     except Stack.DoesNotExist:
         return False
 
-    if not to_stack.belongs_to_session(session):
+    if not stack.belongs_to_session(session):
         return False
 
     return activate_stack(session, stack)
 
+
 def perform_skip_action(request, session):
     return skip(session)
+
 
 def perform_action(request, session_id, action_type):
     success = False
 
     if request.method == 'POST':
         try:
-            session = Session.objects.get(pk = session_id)
+            session = Session.objects.get(pk=session_id)
         except Session.DoesNotExist:
             session = None
 
@@ -186,6 +191,7 @@ def perform_action(request, session_id, action_type):
             'state': state,
             'success': success
         })
+
 
 def state(request, session_id):
     state = get_current_state(request, session_id)

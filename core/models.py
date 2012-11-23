@@ -19,6 +19,7 @@ CARD_KINDS = (
     (CARD_KIND_TREASURE, 'Treasure'),
 )
 
+
 class Player(models.Model):
     user = models.OneToOneField(User)
     active_session = models.OneToOneField('Session', null=True, blank=True)
@@ -29,20 +30,22 @@ class Player(models.Model):
         else:
             return u'%s' % (self.user.first_name)
 
+
 @receiver(post_save, sender=User)
 def create_player(sender, instance, created, **kwargs):
     """
     Create a matching profile whenever a user object is created.
     """
-    if created: 
+    if created:
         profile, new = Player.objects.get_or_create(user=instance)
+
 
 class Session(models.Model):
     belongs_to_player = models.ForeignKey('Player')
 
     # Player's health attribute. Assumes only positive values are allowed, since 0 or less is a loss.
     health = models.PositiveSmallIntegerField(default=20)
-    # To keep track of how many cards have been moved from the current room, since the last skip was activated. 
+    # To keep track of how many cards have been moved from the current room, since the last skip was activated.
     # Defaults to negative value so that we can allow skipping on the very first turn.
     amount_of_cards_moved_since_last_skip = models.IntegerField(default=-1)
 
@@ -55,6 +58,7 @@ class Session(models.Model):
 
     def __unicode__(self):
         return u'%s with Health: %s' % (self.belongs_to_player, self.health)
+
 
 class CardDetail(models.Model):
     kind = models.PositiveSmallIntegerField(choices=CARD_KINDS)
@@ -69,13 +73,14 @@ class CardDetail(models.Model):
         else:
             return u'%s (%s)' % (self.value, self.name)
 
+
 class Card(models.Model):
     belongs_to_session = models.ForeignKey('Session')
-    # Separating the properties into its own table allows us to have several cards of 
+    # Separating the properties into its own table allows us to have several cards of
     # the same kind, but without duplicating data.
     details = models.ForeignKey('CardDetail')
     stack = models.ForeignKey('Stack', null=True)
-    is_special = models.BooleanField(default=False) # Any card has a chance to be special...
+    is_special = models.BooleanField(default=False)  # Any card has a chance to be special...
 
     def can_be_moved(self, to_stack):
         if self.stack:
@@ -95,25 +100,27 @@ class Card(models.Model):
         else:
             return u'%s' % (self.details)
 
+
 def get_first_element(iterable, default=None):
     if iterable:
         for item in iterable:
             return item
     return default
 
+
 class Stack(models.Model):
-    # todo: orderby! a stack is not just a pile of cards, it's a list of cards in a specific order 
+    # todo: orderby! a stack is not just a pile of cards, it's a list of cards in a specific order
     # cards probably need to have a field that specified this order, because cards can be put
     # into any stack, and would then not be orderable just by pk alone..
     is_editable = models.BooleanField(default=True)
 
     def belongs_to_session(self, session):
         if session:
-            if (session.room_stack == self or 
-                session.equipment_stack == self or 
-                session.you_stack == self or 
-                session.treasure_stack == self or 
-                session.discard_stack == self or 
+            if (session.room_stack == self or
+                session.equipment_stack == self or
+                session.you_stack == self or
+                session.treasure_stack == self or
+                session.discard_stack == self or
                 session.forge_stack == self):
                 return True
 
@@ -140,7 +147,7 @@ class Stack(models.Model):
             card.save()
         except:
             return False
-        
+
         return True
 
     def push_many(self, cards):

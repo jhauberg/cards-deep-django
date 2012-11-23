@@ -1,4 +1,4 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('frontend.views',
     url(r'^$', 'index', name='index'),
@@ -10,11 +10,6 @@ urlpatterns = patterns('frontend.views',
     url(r'^profile/$', 'preferences', name='preferences'),
     url(r'^profile/(?P<player_id>\d+)/$', 'profile', name='profile'),
 )
-
-#dunno man
-# urlpatterns += patterns('core.views',
-#     url(r'^rules/$', 'can_skip', name='can_skip'),
-# )
 
 urlpatterns += patterns('core.views',
     url(r'^play/(?P<session_id>\d+)/state/$', view='state', name='state'),
