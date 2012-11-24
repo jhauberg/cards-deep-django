@@ -550,10 +550,10 @@ def skip(session):
         amount_discarded = discard_many(session, room_cards)
         logger.info('discarded %d cards!' % (amount_discarded))
 
-        if amount_discarded > 0:
-            replacement_cards = draw(session, amount_discarded)
-            logger.info('%d new cards were drawn...' % (len(replacement_cards)))
-            session.room_stack.push_many(replacement_cards)
+        # if amount_discarded > 0:
+        #     replacement_cards = draw(session, amount_discarded)
+        #     logger.info('%d new cards were drawn...' % (len(replacement_cards)))
+        #     session.room_stack.push_many(replacement_cards)
 
         try:
             session.amount_of_cards_moved_since_last_skip = 0
