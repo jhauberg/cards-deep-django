@@ -145,3 +145,11 @@
     float: left;
     position: absolute;
 }
+
+#discarded {
+    float: right;
+}
+
+#discarded .card {
+    float: none;
+}

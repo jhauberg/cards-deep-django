@@ -1,6 +1,7 @@
 {% load core_helpers %}
 
 <!DOCTYPE html>
+
 <html>
 
     {% include 'parts/boilerplate/head.html' %}
@@ -28,6 +29,16 @@
                 <ul class="stack" id="map">
                     <li class="card" id="map-bottom"></li>
                     <li class="card" id="map-top"></li>
+                </ul>
+
+                <ul class="stack" id="discarded">
+
+                    {% for card in state.stacks.5.cards %}
+
+                        <li class="card" id="card-{{ card.id }}"></li>
+
+                    {% endfor %}
+
                 </ul>
 
                 <div class="health">
