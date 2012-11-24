@@ -404,7 +404,7 @@ def can_move(session, card, to_stack):
             most_recently_played_monster_card = session.you_stack.get_top()
 
             if most_recently_played_monster_card is not None:
-                if card.value >= most_recently_played_monster_card:
+                if card.details.value >= most_recently_played_monster_card:
                     most_recently_played_weapon_card = session.equipment_stack.get_top()
 
                     if most_recently_played_weapon_card and not most_recently_played_weapon_card.is_special:
