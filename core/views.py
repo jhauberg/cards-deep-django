@@ -67,6 +67,8 @@ def current_state(session):
     current_treasure_cards = list(session.treasure_stack.get_all_cards())
     current_forge_cards = list(session.forge_stack.get_all_cards())
 
+    currently_discarded_cards = list(session.discard_stack.get_all_cards())
+
     return {
         'session_id': session.id,
         'health': int(session.health),
@@ -77,7 +79,8 @@ def current_state(session):
             { 'name': 'equipment', 'id': session.equipment_stack.id, 'cards': current_equipment_cards },
             { 'name': 'you', 'id': session.you_stack.id, 'cards': current_you_cards },
             { 'name': 'treasure', 'id': session.treasure_stack.id, 'cards': current_treasure_cards },
-            { 'name': 'forge', 'id': session.forge_stack.id, 'cards': current_forge_cards }
+            { 'name': 'forge', 'id': session.forge_stack.id, 'cards': current_forge_cards },
+            { 'name': 'discarded', 'id': session.discard_stack.id, 'cards': currently_discarded_cards }
         ]
     }
 
