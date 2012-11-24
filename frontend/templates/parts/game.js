@@ -21,11 +21,16 @@ function selectMap(selected) {
 
 var state = {}
 
-function onStateChanged(previous_state) {
+function updateHealth() {
     var new_health_amount = state['health'];
     var amount_in_pixels = new_health_amount * 6;
 
-    $('.health-bar').css("width", amount_in_pixels);    
+    $('.health-bar').css("width", amount_in_pixels);
+    $('.health-ui .value').text(new_health_amount);
+}
+
+function onStateChanged(previous_state) {
+    updateHealth();
 }
 
 function refresh(newState) {
