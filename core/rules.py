@@ -446,12 +446,14 @@ def move(session, card, to_stack):
             return False
 
     if from_stack == session.room_stack:
-        try:
-            session.amount_of_cards_moved_since_last_skip += 1
-            session.save()
-        except:
-            logger.error(' * could not increment "cards_moved_since_last_skip"!')
-            return False
+        if session.amount_of_cards_moved_since_last_skip != -1:
+            # If set to -1 that means player has not skipped yet, so we don't need to track this.
+            try:
+                session.amount_of_cards_moved_since_last_skip += 1
+                session.save()
+            except:
+                logger.error(' * could not increment "cards_moved_since_last_skip"!')
+                return False
 
         try:
             new_card = draw_single(session)
