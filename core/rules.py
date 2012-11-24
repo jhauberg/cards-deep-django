@@ -296,7 +296,7 @@ def activate_card(session, card):
         return False
 
     if card.details.kind is CARD_KIND_POTION:
-        restored_health = card.value
+        restored_health = card.details.value
         current_health = session.health
 
         current_health += restored_health
@@ -325,7 +325,7 @@ def activate_card(session, card):
 
         if damage:
             if most_recently_played_weapon_card:
-                damage -= most_recently_played_weapon_card.value
+                damage -= most_recently_played_weapon_card.details.value
 
             if damage > 0:
                 try:
