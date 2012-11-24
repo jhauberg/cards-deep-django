@@ -21,14 +21,27 @@ function selectMap(selected) {
 
 var state = {}
 
+function onStateChanged(previous_state) {
+    var new_health_amount = state['health'];
+    var amount_in_pixels = new_health_amount * 6;
+
+    $('.health-bar').css("width", amount_in_pixels);    
+}
+
 function refresh(newState) {
+    var previous_state = state;
+
     if (newState) {
         state = newState;
+
+        onStateChanged(previous_state);
     } else {
         $.get("{% url state state.session_id %}", 
             { },
             function(response) {
                 state = response;
+
+                onStateChanged(previous_state);
             },
             'json'
         );
