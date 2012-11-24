@@ -2,3 +2,7 @@
 *.pot
 *.pyc
 local_settings.py
+
+# generated
+nectar.db
+cards_deep/logs/errors.log
