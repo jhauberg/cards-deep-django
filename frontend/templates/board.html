@@ -11,7 +11,13 @@
         {% if state %}
 
             <div class="board">
+  
+                <ul class="stack" id="discarded">
 
+                    <li class="card"></li>
+
+                </ul>
+                
                 <ul class="stack" id="room">
 
                     {% for card in state.stacks.0.cards %}
@@ -29,16 +35,6 @@
                 <ul class="stack" id="map">
                     <li class="card" id="map-bottom"></li>
                     <li class="card" id="map-top"></li>
-                </ul>
-
-                <ul class="stack" id="discarded">
-
-                    {% for card in state.stacks.5.cards %}
-
-                        <li class="card" id="card-{{ card.id }}"></li>
-
-                    {% endfor %}
-
                 </ul>
 
                 <div class="health">

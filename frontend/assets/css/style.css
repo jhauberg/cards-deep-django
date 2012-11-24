@@ -147,9 +147,9 @@
 }
 
 #discarded {
-    float: right;
+    float: clear;
 }
 
 #discarded .card {
-    float: none;
+    
 }
