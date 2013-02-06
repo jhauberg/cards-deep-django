@@ -22,11 +22,21 @@ function selectMap(selected) {
 var state = {}
 
 function updateHealth() {
-    var new_health_amount = state['health'];
+    var new_health_amount = state.health;
     var amount_in_pixels = new_health_amount * 6;
 
     $('.health-bar').css("width", amount_in_pixels);
     $('.health-ui .value').text(new_health_amount);
+}
+
+function determineDiscardVisibility() {
+    var discarded_stack_element = $('#discarded');
+
+    if (state.stacks[5].cards.length > 0) {
+        discarded_stack_element.css('visibility', 'visible');
+    } else {
+        discarded_stack_element.css('visibility', 'hidden');
+    }
 }
 
 function onStateChanged(previous_state) {
@@ -47,6 +57,8 @@ function refresh(newState) {
                 state = response;
 
                 onStateChanged(previous_state);
+
+                determineDiscardVisibility();
             },
             'json'
         );
@@ -64,6 +76,46 @@ $("#room .card").mouseleave(
         selectCardInRoom(this, false);
     }
 );
+
+function getRandomBoolean() {
+    return Math.random() > 0.5;
+}
+
+function getRandomIntInRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function rotate(object, degrees) {
+    object.css({
+  '-webkit-transform' : 'rotate('+degrees+'deg)',
+     '-moz-transform' : 'rotate('+degrees+'deg)',  
+      '-ms-transform' : 'rotate('+degrees+'deg)',  
+       '-o-transform' : 'rotate('+degrees+'deg)',  
+          'transform' : 'rotate('+degrees+'deg)',  
+               'zoom' : 1
+
+    });
+}
+
+function translate(object, offset) {
+    object.css({
+        'margin-left': offset.x,
+        'margin-top': offset.y
+    });
+}
+
+function fidget(element, range) {
+    var variation = getRandomIntInRange(-range, range);
+    var rotation = getRandomBoolean() ? variation : -variation;
+
+    var offset = { 
+        x: variation / 2, 
+        y: variation 
+    };
+
+    rotate(element, rotation);
+    translate(element, offset);
+}
 
 $("#room .card").mouseup(
     function() {
@@ -83,6 +135,25 @@ $("#room .card").mouseup(
         }
         
         if (card_id != -1 && move_to_stack_id != -1) {
+            var discarded = $('#discarded');
+            var discarded_position = discarded.position();
+
+            $(this).unbind('mouseup mouseenter mouseleave');
+
+            $(this).animate({
+                left: discarded_position.left,
+                top: discarded_position.top
+            }, 1000, 'linear', function() {
+                $(this).removeAttr('style');
+                $(this).removeClass('monster treasure scrap potion weapon');
+                $(this).empty();
+
+                fidget($(this), 12);
+
+                discarded.append(this);
+                discarded.css('visibility', 'visible');
+            });
+
             $.post("{% url perform_action state.session_id 'move' %}", 
                 { 
                     'csrfmiddlewaretoken': '{{ csrf_token }}',
@@ -129,3 +200,8 @@ $("#map").click(
 );
 
 refresh();
+
+// fidget with the discarded cards so the stack looks messy
+$('#discarded .card').each(function(index) {
+    fidget($(this), 12);    
+});

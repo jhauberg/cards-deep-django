@@ -12,9 +12,13 @@
 
             <div class="board">
   
-                <ul class="stack" id="discarded">
+                <ul class="card stack" id="discarded" style="visibility: hidden;">
 
-                    <li class="card"></li>
+                    {% for card in state.stacks.5.cards %}
+
+                        <li class="card" id="card-{{ card.id }}"></li>
+
+                    {% endfor %}
 
                 </ul>
                 
