@@ -45,6 +45,26 @@ def register(request):
     return HttpResponse(status=500)
 
 
+def player_or_guest(request):
+    if 'username' not in request.POST or 'password' not in request.POST:
+        try:
+            user = User.objects.get(pk=1)
+        except User.DoesNotExist:
+            user = None
+    else:
+        username = request.POST['username']
+        password = request.POST['password']
+
+        try:
+            user = authenticate(
+                username=username,
+                password=password)
+        except:
+            user = None
+
+    return user
+
+
 def login(request):
     if request.method == 'GET':
         return render(
@@ -52,12 +72,7 @@ def login(request):
             'login.html')
 
     if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-
-        user = authenticate(
-            username=username,
-            password=password)
+        user = player_or_guest(request)
 
         if user is None:
             return HttpResponse(status=500)

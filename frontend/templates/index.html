@@ -33,9 +33,21 @@
         {% else %}
 
             <a href="{% url register %}">Sign up</a>
+
             <a href="{% url login %}">Login</a>
+            <a href="#" id="login-as-guest">Login as Guest</a>
 
         {% endif %}
 
     </body>
+
+    <script type="text/javascript">
+        $('#login-as-guest').click(function(e) {
+            $.post("{% url login_as_guest %}", 
+                { 
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                }
+            );
+        });
+    </script>
 </html>
