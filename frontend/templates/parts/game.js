@@ -123,23 +123,41 @@ $("#room .card").mouseup(
         }
         
         if (card_id != -1 && move_to_stack_id != -1) {
+            // note that everything just goes to discard stack right now - most cards will actually go to a 
+            // specific pile first, and then later to the discard stack
             var discarded = $('#discarded');
-            var discarded_position = discarded.position();
+            var discarded_offset = discarded.offset();
+
+            var card_offset = $(this).offset();
+
+            var dx = discarded_offset.left - card_offset.left;
+            var dy = discarded_offset.top - card_offset.top;
 
             $(this).unbind('mouseup mouseenter mouseleave');
 
             $(this).animate({
-                left: discarded_position.left,
-                top: discarded_position.top
-            }, 1000, 'linear', function() {
-                $(this).removeAttr('style');
-                $(this).removeClass('monster treasure scrap potion weapon');
-                $(this).empty();
+                top: dy <= 0 ? 40 : -40
+            }, 200, function() {
+                $(this).animate({
+                    top: dy,
+                    left: dx
+                }, 500, function() {
+                    $(this).animate({
+                        opacity: 0
+                    }, 300, function() {
+                        $(this).removeAttr('style');
+                        $(this).removeClass('monster treasure scrap potion weapon');
+                        $(this).empty();
 
-                fidget($(this), 12);
+                        discarded.append(this);
 
-                discarded.append(this);
-                discarded.css('visibility', 'visible');
+                        fidget($(this), 12);
+
+                        $(this).animate({
+                            opacity: 1
+                        }, 100);
+                    });
+                });
             });
 
             $.post("{% url perform_action state.session_id 'move' %}", 
