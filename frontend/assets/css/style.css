@@ -76,6 +76,7 @@
 
 .health {
     position: relative;
+    float: left;
     top: 200px;
 }
 
@@ -122,6 +123,10 @@
 /**
  * All cards in the room stack are laid out from left to right.
  */
+
+#room {
+    float: left;
+}
 
 #room .card {
     margin-right: 8px;

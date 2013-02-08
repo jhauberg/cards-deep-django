@@ -29,16 +29,6 @@ function updateHealth() {
     $('.health-ui .value').text(new_health_amount);
 }
 
-function determineDiscardVisibility() {
-    var discarded_stack_element = $('#discarded');
-
-    if (state.stacks[5].cards.length > 0) {
-        discarded_stack_element.css('visibility', 'visible');
-    } else {
-        discarded_stack_element.css('visibility', 'hidden');
-    }
-}
-
 function onStateChanged(previous_state) {
     updateHealth();
 }
@@ -57,8 +47,6 @@ function refresh(newState) {
                 state = response;
 
                 onStateChanged(previous_state);
-
-                determineDiscardVisibility();
             },
             'json'
         );
