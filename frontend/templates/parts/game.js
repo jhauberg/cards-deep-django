@@ -13,14 +13,12 @@ function move(card, stack, completed) {
     );
 }
 
-function skip() {
+function skip(completed) {
     $.post("{% url perform_action state.session_id 'skip' %}", 
         { 
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
-        function(response) {
-            refresh(response.state);
-        },
+        completed,
         'json'
     );
 }
@@ -241,9 +239,28 @@ $("#map").mouseleave(
     }
 );
 
+jQuery.fn.reverse = [].reverse;
+
 $("#map").click(
     function() {
-        skip();
+        if (state.can_skip) {
+            skip(function(response) {
+                if (response.success) {
+                    $('#room .card').reverse().each($).wait(150, function(index) {
+                        var card = $(this);
+                        var discarded = $('#discarded');
+
+                        animateMove(card, discarded, function() {
+                            animateDiscard(card);
+                        });
+                    });
+
+                    refresh(response.state);
+                }
+            });
+
+            selectMap(false);
+        }
     }
 );
 
