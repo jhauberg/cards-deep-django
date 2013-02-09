@@ -312,6 +312,8 @@ def activate_card(session, card):
         except:
             return False
 
+        discard(session, card)
+
     if card.details.kind is CARD_KIND_MONSTER:
         most_recently_played_weapon_card = session.equipment_stack.get_top()
 
@@ -482,7 +484,7 @@ def discard(session, card):
         all_discarded_cards = session.discard_stack.get_all_cards()
 
         if all_discarded_cards.count() >= 10:
-            oldest_discarded_card = all_discarded_cards.reverse()[:1]
+            oldest_discarded_card = all_discarded_cards.reverse()[:1][0]
 
             oldest_discarded_card.stack = None
             oldest_discarded_card.save()
