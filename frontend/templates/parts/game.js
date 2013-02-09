@@ -1,69 +1,34 @@
-function selectCardInRoom(element, selected) {
-    var amount = selected ? '12px' : '0px';
+//////////////
+// game rules
 
-    $(element).stop().animate({
-            top: amount
-        }, 'fast'
+function move(card, stack) {
+    $.post("{% url perform_action state.session_id 'move' %}", 
+        { 
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+            'card_id': card,
+            'to_stack_id': stack
+        },
+        function(response) {
+            refresh(response.state);
+        },
+        'json'
     );
 }
 
-function selectMap(selected) {
-    var amount = selected ? '8px' : '0px';
-    
-    $('#map-bottom').stop().animate({
-            left: amount
-        }, 'fast'
+function skip() {
+    $.post("{% url perform_action state.session_id 'skip' %}", 
+        { 
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        function(response) {
+            refresh(response.state);
+        },
+        'json'
     );
 }
 
-//////////////////
-// event hookups
-
-var state = {}
-
-function updateHealth() {
-    var new_health_amount = state.health;
-    var amount_in_pixels = new_health_amount * 6;
-
-    $('.health-bar').css("width", amount_in_pixels);
-    $('.health-ui .value').text(new_health_amount);
-}
-
-function onStateChanged(previous_state) {
-    updateHealth();
-}
-
-function refresh(newState) {
-    var previous_state = state;
-
-    if (newState) {
-        state = newState;
-
-        onStateChanged(previous_state);
-    } else {
-        $.get("{% url state state.session_id %}", 
-            { },
-            function(response) {
-                state = response;
-
-                onStateChanged(previous_state);
-            },
-            'json'
-        );
-    }
-}
-
-$("#room .card").mouseenter(
-    function() {
-        selectCardInRoom(this, true);
-    }
-);
-
-$("#room .card").mouseleave(
-    function() {
-        selectCardInRoom(this, false);
-    }
-);
+////////
+// util
 
 function getRandomBoolean() {
     return Math.random() > 0.5;
@@ -104,6 +69,76 @@ function fidget(element, range) {
     rotate(element, rotation);
     translate(element, offset);
 }
+
+////////////////////
+// game interaction
+
+var state = {}
+
+function onStateChanged(previous_state) {
+    updateHealth();
+}
+
+function updateHealth() {
+    var new_health_amount = state.health;
+    var amount_in_pixels = new_health_amount * 6;
+
+    $('.health-bar').css("width", amount_in_pixels);
+    $('.health-ui .value').text(new_health_amount);
+}
+
+function refresh(newState) {
+    var previous_state = state;
+
+    if (newState) {
+        state = newState;
+
+        onStateChanged(previous_state);
+    } else {
+        $.get("{% url state state.session_id %}", 
+            { },
+            function(response) {
+                state = response;
+
+                onStateChanged(previous_state);
+            },
+            'json'
+        );
+    }
+}
+
+function selectCardInRoom(element, selected) {
+    var amount = selected ? '12px' : '0px';
+
+    $(element).stop().animate({
+            top: amount
+        }, 'fast'
+    );
+}
+
+function selectMap(selected) {
+    var amount = selected ? '8px' : '0px';
+    
+    $('#map-bottom').stop().animate({
+            left: amount
+        }, 'fast'
+    );
+}
+
+/////////
+// hooks
+
+$("#room .card").mouseenter(
+    function() {
+        selectCardInRoom(this, true);
+    }
+);
+
+$("#room .card").mouseleave(
+    function() {
+        selectCardInRoom(this, false);
+    }
+);
 
 $("#room .card").mouseup(
     function() {
@@ -160,17 +195,7 @@ $("#room .card").mouseup(
                 });
             });
 
-            $.post("{% url perform_action state.session_id 'move' %}", 
-                { 
-                    'csrfmiddlewaretoken': '{{ csrf_token }}',
-                    'card_id': card_id,
-                    'to_stack_id': move_to_stack_id
-                },
-                function(response) {
-                    refresh(response.state);
-                },
-                'json'
-            );
+            move(card_id, move_to_stack_id);
         }
     }
 );
@@ -193,21 +218,13 @@ $("#map").mouseleave(
 
 $("#map").click(
     function() {
-        $.post("{% url perform_action state.session_id 'skip' %}", 
-            { 
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            },
-            function(response) {
-                refresh(response.state);
-            },
-            'json'
-        );
+        skip();
     }
 );
 
 refresh();
 
-// fidget with the discarded cards so the stack looks messy
+// fidget with the discarded cards so the stack looks messy initially
 $('#discarded .card').each(function(index) {
     fidget($(this), 12);    
 });

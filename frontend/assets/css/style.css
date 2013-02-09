@@ -76,8 +76,9 @@
 
 .health {
     position: relative;
-    float: left;
-    top: 200px;
+    clear: both;
+    left: 170px;
+    top: 100px;
 }
 
 .health-ui {
@@ -95,6 +96,7 @@
     text-align: right;
     width: 100%;
     right: 8px;
+    top: 1px;
     position: absolute;
     font-family: 'Georgia';
     font-weight: bold;
@@ -152,7 +154,6 @@
 }
 
 #discarded {
-    float: none;
     margin-bottom: 32px;
     transform:rotate(7deg);
     -ms-transform:rotate(7deg); /* IE 9 */
@@ -162,5 +163,31 @@
 }
 
 #discarded .card {
+    position: absolute;
+}
+
+#action-stacks {
+    clear: both;
+    position: relative;
+    top: 50px;
+}
+
+#equipment {
+    float: left;
+    margin-left: 30%;
+    background-image: url('../img/stack-equipment.png');
+}
+
+#equipment .card {
+    position: absolute;
+}
+
+#you {
+    float: right;
+    margin-right: 30%;
+    background-image: url('../img/stack-you.png');
+}
+
+#you .card {
     position: absolute;
 }

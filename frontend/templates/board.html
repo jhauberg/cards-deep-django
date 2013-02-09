@@ -41,6 +41,28 @@
                     <li class="card" id="map-top"></li>
                 </ul>
 
+                <div id="action-stacks">
+                    <ul class="card stack" id="equipment">
+                        
+                        {% for card in state.stacks.1.cards %}
+
+                            <li class="card" id="card-{{ card.id }}"></li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                    <ul class="card stack" id="you">
+                        
+                        {% for card in state.stacks.2.cards %}
+
+                            <li class="card" id="card-{{ card.id }}"></li>
+
+                        {% endfor %}
+
+                    </ul>
+                </div>
+
                 <div class="health">
                     <div class="health-ui">
                         <div class="value">
