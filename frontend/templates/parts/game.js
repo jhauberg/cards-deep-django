@@ -1,16 +1,14 @@
 //////////////
 // game rules
 
-function move(card, stack) {
+function move(card, stack, completed) {
     $.post("{% url perform_action state.session_id 'move' %}", 
         { 
             'csrfmiddlewaretoken': '{{ csrf_token }}',
             'card_id': card,
             'to_stack_id': stack
         },
-        function(response) {
-            refresh(response.state);
-        },
+        completed,
         'json'
     );
 }
@@ -216,8 +214,12 @@ $("#room .card").mouseup(
 
         if ((card != null && card_id != -1) && 
             (move_to_stack != null && move_to_stack_id != -1)) {
-            animateMove(card, move_to_stack, function() {
-                move(card_id, move_to_stack_id);
+            move(card_id, move_to_stack_id, function(response) {
+                if (response.success) {
+                    animateMove(card, move_to_stack, function() {
+                        refresh(response.state);
+                    });    
+                }
             });
         }
     }
