@@ -34,6 +34,10 @@
 
                     </ul>
 
+                    <div class="button {% if state.stacks.1.cards|length == 0 or state.stacks.2.cards|length == 0 %} disabled {% endif %}" id="strike-action">
+                        STRIKE
+                    </div>
+
                     <ul class="card stack" id="you">
                         
                         {% include 'parts/stack.html' with stack=state.stacks.2 only %}

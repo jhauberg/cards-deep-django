@@ -23,6 +23,17 @@ function skip(completed) {
     );
 }
 
+function clear(stack, completed) {
+    $.post("{% url perform_action state.session_id 'clear' %}", 
+        { 
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+            'stack_id': stack
+        },
+        completed,
+        'json'
+    );
+}
+
 ////////
 // util
 
@@ -73,6 +84,17 @@ var state = {}
 
 function onStateChanged(previous_state) {
     updateHealth();
+
+    determineStrikeAvailability();
+}
+
+function determineStrikeAvailability() {
+    if (state.stacks[1].cards.length > 0 ||
+        state.stacks[2].cards.length > 0) {
+        $('#strike-action').removeClass('disabled');
+    } else {
+        $('#strike-action').addClass('disabled');
+    }
 }
 
 function updateHealth() {
@@ -256,6 +278,9 @@ $("#map").click(
                     });
 
                     refresh(response.state);
+
+                    // todo: take all cards from response.state.stacks.0.cards and animate them onto the room
+                    //  * make url to retrieve rendered template of cards?
                 }
             });
 
@@ -277,4 +302,48 @@ $('#equipment .card').each(function(index) {
 
 $('#you .card').each(function(index) {
     fidget($(this), FIDGET_YOU);    
+});
+
+$('.button').each(function(index) {
+    $(this).mousedown(function() {
+        if (!$(this).hasClass('disabled')) {
+            $(this).addClass('button-pressed');
+        }
+    });
+
+    $(this).mouseleave(function() {
+        $(this).removeClass('button-pressed');
+    });
+
+    $(this).mouseup(function() {
+        $(this).removeClass('button-pressed');
+    });
+});
+
+$('#strike-action').mouseup(function() {
+    if ($(this).hasClass('disabled')) {
+        return;
+    }
+
+    var discarded = $('#discarded');
+
+    clear(state.stacks[1].id, function(response) {
+        $('#equipment .card').reverse().each($).wait(50, function(index) {
+            var card = $(this);
+    
+            animateMove(card, discarded, function() {
+                animateDiscard(card);
+            });
+        });
+
+        clear(state.stacks[2].id, function(response) {
+            $('#you .card').reverse().each($).wait(150, function(index) {
+                var card = $(this);
+    
+                animateMove(card, discarded, function() {
+                    animateDiscard(card);
+                });
+            });
+        });
+    });
 });

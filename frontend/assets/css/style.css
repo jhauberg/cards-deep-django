@@ -29,6 +29,7 @@
     display: block;
     width: 80px;
     height: 106px;
+    cursor: default;
 }
 
 /**
@@ -75,6 +76,7 @@
 }
 
 .health {
+    cursor: default;
     position: relative;
     clear: both;
     left: 170px;
@@ -120,6 +122,38 @@
     float: left;
     width: 120px;
     height: 19px;
+}
+
+.button {
+    float: left;
+    position: relative;
+    background-image: url('../img/button.png');
+    background-repeat: no-repeat;
+    width: 66px;
+    height: 53px;
+    color: white;
+    padding-top: 16px;
+    text-align: center;
+    font-family: 'Georgia';
+    font-weight: bold;
+    font-size: 12px;
+    margin-top: 0px;
+    cursor: pointer;
+}
+
+.button-pressed {
+    background-image: url('../img/button-pressed.png');
+    margin-top: 2px;
+    height: 51px;
+}
+
+.disabled {
+    opacity: 0.6;
+}
+
+#strike-action {
+    top: 22px;
+    left: 22px;
 }
 
 /**
@@ -174,7 +208,7 @@
 
 #equipment {
     float: left;
-    margin-left: 30%;
+    margin-left: 25%;
     background-image: url('../img/stack-equipment.png');
 }
 
@@ -184,7 +218,7 @@
 
 #you {
     float: right;
-    margin-right: 30%;
+    margin-right: 25%;
     background-image: url('../img/stack-you.png');
 }
 

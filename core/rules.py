@@ -232,7 +232,9 @@ def activate_stack(session, stack):
 
     if stack == session.equipment_stack or stack == session.you_stack:
         # todo: discard all and score points
-        pass
+        discard_many(session, session.equipment_stack.get_all_cards())
+
+        score = discard_many(session, session.you_stack.get_all_cards())
 
     if stack == session.forge_stack:
         # Draw a new weapon card that is valued depending on how many cards were spent.
