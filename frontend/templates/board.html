@@ -1,5 +1,3 @@
-{% load core_helpers %}
-
 <!DOCTYPE html>
 
 <html>
@@ -14,25 +12,13 @@
   
                 <ul class="card stack" id="discarded">
 
-                    {% for card in state.stacks.5.cards %}
-
-                        <li class="card" id="card-{{ card.id }}"></li>
-
-                    {% endfor %}
+                    {% include 'parts/stack.html' with stack=state.stacks.5 backside=1 only %}
 
                 </ul>
                 
                 <ul class="stack" id="room">
 
-                    {% for card in state.stacks.0.cards %}
-
-                        <li class="card {{ card.details.kind|kind_name }}" id="card-{{ card.id }}">
-
-                            {% include 'parts/card.html' with card=card only %}
-
-                        </li>
-
-                    {% endfor %}
+                    {% include 'parts/stack.html' with stack=state.stacks.0 only %}
 
                 </ul>
 
@@ -44,29 +30,13 @@
                 <div id="action-stacks">
                     <ul class="card stack" id="equipment">
                         
-                        {% for card in state.stacks.1.cards %}
-
-                            <li class="card {{ card.details.kind|kind_name }}" id="card-{{ card.id }}">
-
-                                {% include 'parts/card.html' with card=card only %}
-
-                            </li>
-
-                        {% endfor %}
+                        {% include 'parts/stack.html' with stack=state.stacks.1 only %}
 
                     </ul>
 
                     <ul class="card stack" id="you">
                         
-                        {% for card in state.stacks.2.cards %}
-
-                            <li class="card {{ card.details.kind|kind_name }}" id="card-{{ card.id }}">
-
-                                {% include 'parts/card.html' with card=card only %}
-
-                            </li>
-
-                        {% endfor %}
+                        {% include 'parts/stack.html' with stack=state.stacks.2 only %}
 
                     </ul>
                 </div>
