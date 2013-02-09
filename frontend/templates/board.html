@@ -46,7 +46,11 @@
                         
                         {% for card in state.stacks.1.cards %}
 
-                            <li class="card" id="card-{{ card.id }}"></li>
+                            <li class="card {{ card.details.kind|kind_name }}" id="card-{{ card.id }}">
+
+                                {% include 'parts/card.html' with card=card only %}
+
+                            </li>
 
                         {% endfor %}
 
@@ -56,7 +60,11 @@
                         
                         {% for card in state.stacks.2.cards %}
 
-                            <li class="card" id="card-{{ card.id }}"></li>
+                            <li class="card {{ card.details.kind|kind_name }}" id="card-{{ card.id }}">
+
+                                {% include 'parts/card.html' with card=card only %}
+
+                            </li>
 
                         {% endfor %}
 

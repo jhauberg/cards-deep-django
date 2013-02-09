@@ -128,6 +128,10 @@ function selectMap(selected) {
 /////////
 // hooks
 
+var FIDGET_DISCARD = 12;
+var FIDGET_EQUIPMENT = 6;
+var FIDGET_YOU = 6;
+
 $("#room .card").mouseenter(
     function() {
         selectCardInRoom(this, true);
@@ -140,62 +144,81 @@ $("#room .card").mouseleave(
     }
 );
 
+function animateDiscard(card) {
+    var discarded = $('#discarded');
+
+    card.animate({
+        opacity: 0
+    }, 300, function() {
+        card.removeAttr('style');
+        card.removeClass('monster treasure scrap potion weapon');
+        card.empty();
+
+        discarded.append(this);
+
+        fidget(card, FIDGET_DISCARD);
+
+        card.animate({
+            opacity: 1
+        }, 100);
+    });
+}
+
+function animateMove(card, stack, completed) {
+    var stack_offset = stack.offset();
+    var card_offset = card.offset();
+
+    var dx = stack_offset.left - card_offset.left;
+    var dy = stack_offset.top - card_offset.top;
+
+    card.unbind('mouseup mouseenter mouseleave');
+
+    card.animate({
+        top: dy <= 0 ? 40 : -40
+    }, 200, function() {
+        card.animate({
+            top: dy,
+            left: dx
+        }, 500, function() {
+            card.removeAttr('style');
+
+            stack.append(this);
+
+            fidget(card, FIDGET_YOU);
+
+            completed();
+        });
+    });
+}
+
 $("#room .card").mouseup(
     function() {
+        var card = $(this);
         var card_id = this.id.replace('card-', '');
-        var move_to_stack_id = -1;
 
-        if ($(this).hasClass('weapon')) {
+        var move_to_stack_id = -1;
+        var move_to_stack = null;
+
+        if (card.hasClass('weapon')) {
             move_to_stack_id = state.stacks[1].id;
-        } else if ($(this).hasClass('monster')) {
+            move_to_stack = $('#equipment');
+        } else if (card.hasClass('monster')) {
             move_to_stack_id = state.stacks[2].id;
-        } else if ($(this).hasClass('potion')) {
+            move_to_stack = $('#you');
+        } else if (card.hasClass('potion')) {
             move_to_stack_id = state.stacks[2].id;
-        } else if ($(this).hasClass('treasure')) {
+            move_to_stack = $('#you');
+        } else if (card.hasClass('treasure')) {
             move_to_stack_id = state.stacks[3].id;
-        } else if ($(this).hasClass('scrap')) {
+        } else if (card.hasClass('scrap')) {
             move_to_stack_id = state.stacks[4].id;
         }
-        
-        if (card_id != -1 && move_to_stack_id != -1) {
-            // note that everything just goes to discard stack right now - most cards will actually go to a 
-            // specific pile first, and then later to the discard stack
-            var discarded = $('#discarded');
-            var discarded_offset = discarded.offset();
 
-            var card_offset = $(this).offset();
-
-            var dx = discarded_offset.left - card_offset.left;
-            var dy = discarded_offset.top - card_offset.top;
-
-            $(this).unbind('mouseup mouseenter mouseleave');
-
-            $(this).animate({
-                top: dy <= 0 ? 40 : -40
-            }, 200, function() {
-                $(this).animate({
-                    top: dy,
-                    left: dx
-                }, 500, function() {
-                    $(this).animate({
-                        opacity: 0
-                    }, 300, function() {
-                        $(this).removeAttr('style');
-                        $(this).removeClass('monster treasure scrap potion weapon');
-                        $(this).empty();
-
-                        discarded.append(this);
-
-                        fidget($(this), 12);
-
-                        $(this).animate({
-                            opacity: 1
-                        }, 100);
-                    });
-                });
+        if ((card != null && card_id != -1) && 
+            (move_to_stack != null && move_to_stack_id != -1)) {
+            animateMove(card, move_to_stack, function() {
+                move(card_id, move_to_stack_id);
             });
-
-            move(card_id, move_to_stack_id);
         }
     }
 );
@@ -224,7 +247,15 @@ $("#map").click(
 
 refresh();
 
-// fidget with the discarded cards so the stack looks messy initially
+// fidget with the cards so the stacks looks messy initially
 $('#discarded .card').each(function(index) {
-    fidget($(this), 12);    
+    fidget($(this), FIDGET_DISCARD);    
+});
+
+$('#equipment .card').each(function(index) {
+    fidget($(this), FIDGET_EQUIPMENT);    
+});
+
+$('#you .card').each(function(index) {
+    fidget($(this), FIDGET_YOU);    
 });
