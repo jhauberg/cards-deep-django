@@ -396,7 +396,7 @@ def can_move(session, card, to_stack):
     if to_stack == session.you_stack:
         if card.details.kind is not CARD_KIND_MONSTER and card.details.kind is not CARD_KIND_POTION:
             # Only monsters or potions can be placed here
-            logger.error(' * only monster cards can be moved here!')
+            logger.error(' * only monster or potion cards can be moved here!')
             return False
 
         if card.details.kind is CARD_KIND_MONSTER:
@@ -404,7 +404,7 @@ def can_move(session, card, to_stack):
             most_recently_played_monster_card = session.you_stack.get_top()
 
             if most_recently_played_monster_card is not None:
-                if card.details.value >= most_recently_played_monster_card:
+                if card.details.value >= most_recently_played_monster_card.details.value:
                     most_recently_played_weapon_card = session.equipment_stack.get_top()
 
                     if most_recently_played_weapon_card and not most_recently_played_weapon_card.is_special:
