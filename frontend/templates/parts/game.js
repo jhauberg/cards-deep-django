@@ -236,9 +236,21 @@ $("#room .card").mouseup(
             (move_to_stack != null && move_to_stack_id != -1)) {
             move(card_id, move_to_stack_id, function(response) {
                 if (response.success) {
+                    var shouldBeDiscardedImmediately = 
+                        (card.hasClass('monster') && state.stacks[1].cards.length == 0) ||
+                        (card.hasClass('potion'));
+
                     animateMove(card, move_to_stack, function() {
                         refresh(response.state);
-                    });    
+
+                        if (shouldBeDiscardedImmediately) {
+                            var discarded = $('#discarded');
+
+                            animateMove(card, discarded, function() {
+                                animateDiscard(card);
+                            });
+                        }
+                    });   
                 }
             });
         }
@@ -328,22 +340,30 @@ $('#strike-action').mouseup(function() {
     var discarded = $('#discarded');
 
     clear(state.stacks[1].id, function(response) {
-        $('#equipment .card').reverse().each($).wait(50, function(index) {
-            var card = $(this);
-    
-            animateMove(card, discarded, function() {
-                animateDiscard(card);
-            });
-        });
-
-        clear(state.stacks[2].id, function(response) {
-            $('#you .card').reverse().each($).wait(150, function(index) {
+        if (state.stacks[1].cards.length > 0) {
+            $('#equipment .card').reverse().each($).wait(50, function(index) {
                 var card = $(this);
-    
+        
                 animateMove(card, discarded, function() {
+                    refresh(response.state);
+
                     animateDiscard(card);
                 });
             });
+        }
+
+        clear(state.stacks[2].id, function(response) {
+            if (state.stacks[2].cards.length > 0) {
+                $('#you .card').reverse().each($).wait(50, function(index) {
+                    var card = $(this);
+        
+                    animateMove(card, discarded, function() {
+                        refresh(response.state);
+
+                        animateDiscard(card);
+                    });
+                });
+            }
         });
     });
 });
