@@ -1,14 +1,8 @@
-# Status
-
-CURRENTLY NOT PLAYABLE!
-
------
-
 # Cards Deep
 
 A web-based implementation of a [fast-paced card game](https://github.com/shrt/cards-deep-ruleset). Python and Django. 
 
-Currently looks like this:
+It currently looks like this:
 
 ![Screenshot](https://raw.github.com/shrt/cards-deep-django/master/screenshot.png)
 
