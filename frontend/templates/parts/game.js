@@ -146,11 +146,8 @@ function selectMap(selected) {
 /////////
 // hooks
 
-var FIDGET_DISCARD = 12;
-var FIDGET_EQUIPMENT = 6;
-var FIDGET_TREASURE = 6;
-var FIDGET_FORGE = 6;
-var FIDGET_YOU = 6;
+var FIDGET_AMOUNT_DISCARD = 12;
+var FIDGET_AMOUNT = 6;
 
 $("#room .card").mouseenter(
     function() {
@@ -176,7 +173,7 @@ function animateDiscard(card) {
 
         discarded.append(this);
 
-        fidget(card, FIDGET_DISCARD);
+        fidget(card, FIDGET_AMOUNT_DISCARD);
 
         card.animate({
             opacity: 1
@@ -204,7 +201,7 @@ function animateMove(card, stack, completed) {
 
             stack.append(this);
 
-            fidget(card, FIDGET_YOU);
+            fidget(card, FIDGET_AMOUNT);
 
             completed();
         });
@@ -309,23 +306,23 @@ refresh();
 
 // fidget with the cards so the stacks looks messy initially
 $('#discarded .card').each(function(index) {
-    fidget($(this), FIDGET_DISCARD);    
+    fidget($(this), FIDGET_AMOUNT_DISCARD);
 });
 
 $('#equipment .card').each(function(index) {
-    fidget($(this), FIDGET_EQUIPMENT);    
+    fidget($(this), FIDGET_AMOUNT);
 });
 
 $('#you .card').each(function(index) {
-    fidget($(this), FIDGET_YOU);    
+    fidget($(this), FIDGET_AMOUNT);
 });
 
 $('#treasure .card').each(function(index) {
-    fidget($(this), FIDGET_TREASURE);    
+    fidget($(this), FIDGET_AMOUNT);
 });
 
 $('#forge .card').each(function(index) {
-    fidget($(this), FIDGET_FORGE);    
+    fidget($(this), FIDGET_AMOUNT);
 });
 
 $('.button').each(function(index) {
