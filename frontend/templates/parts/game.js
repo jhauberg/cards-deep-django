@@ -148,6 +148,8 @@ function selectMap(selected) {
 
 var FIDGET_DISCARD = 12;
 var FIDGET_EQUIPMENT = 6;
+var FIDGET_TREASURE = 6;
+var FIDGET_FORGE = 6;
 var FIDGET_YOU = 6;
 
 $("#room .card").mouseenter(
@@ -228,8 +230,10 @@ $("#room .card").mouseup(
             move_to_stack = $('#you');
         } else if (card.hasClass('treasure')) {
             move_to_stack_id = state.stacks[3].id;
+            move_to_stack = $('#treasure');
         } else if (card.hasClass('scrap')) {
             move_to_stack_id = state.stacks[4].id;
+            move_to_stack = $('#forge');
         }
 
         if ((card != null && card_id != -1) && 
@@ -314,6 +318,14 @@ $('#equipment .card').each(function(index) {
 
 $('#you .card').each(function(index) {
     fidget($(this), FIDGET_YOU);    
+});
+
+$('#treasure .card').each(function(index) {
+    fidget($(this), FIDGET_TREASURE);    
+});
+
+$('#forge .card').each(function(index) {
+    fidget($(this), FIDGET_FORGE);    
 });
 
 $('.button').each(function(index) {

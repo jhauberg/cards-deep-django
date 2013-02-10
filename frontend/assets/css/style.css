@@ -80,7 +80,7 @@
     position: relative;
     clear: both;
     left: 170px;
-    top: 100px;
+    top: 150px;
 }
 
 .health-ui {
@@ -203,12 +203,12 @@
 #action-stacks {
     clear: both;
     position: relative;
-    top: 50px;
+    top: 80px;
 }
 
 #equipment {
     float: left;
-    margin-left: 25%;
+    margin-left: 10%;
     background-image: url('../img/stack-equipment.png');
 }
 
@@ -218,10 +218,32 @@
 
 #you {
     float: right;
-    margin-right: 25%;
+    margin-right: 10%;
     background-image: url('../img/stack-you.png');
 }
 
 #you .card {
+    position: absolute;
+}
+
+#forge {
+    float: left;
+    top: 40px;
+    left: 5px;
+    background-image: url('../img/stack-forge.png');
+}
+
+#forge .card {
+    position: absolute;
+}
+
+#treasure {
+    float: right;
+    top: 40px;
+    right: 5px;
+    background-image: url('../img/stack-treasure.png');
+}
+
+#treasure .card {
     position: absolute;
 }
