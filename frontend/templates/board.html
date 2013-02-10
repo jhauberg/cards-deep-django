@@ -60,6 +60,10 @@
                     </div>
                 </div>
 
+                <div class="button {% if state.stacks.4.cards|length == 0 %} disabled {% endif %}" id="forge-action">
+                    FORGE<br>{% if state.stacks.4.cards|length > 0 %}{{ state.stacks.4.cards|length }}{% endif %}
+                </div>
+
                 <div class="health">
                     <div class="health-ui">
                         <div class="value">

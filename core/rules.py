@@ -107,6 +107,8 @@ def draw_single(session, properties=None):
     if session is None:
         return None
 
+    card_should_be_special = False
+
     if properties is None:
         card_should_be_beneficial = roll(0, 100) >= 60  # 40 chance of not being a monster card
         card_should_be_special = roll(0, 100) >= 95     # 5% chance of being special
@@ -260,7 +262,10 @@ def activate_stack(session, stack):
 
         # Attempt placing the new weapon on the equipment stack. Keep in mind that it is assumed
         # that the equipment stack is empty when reaching this point.
-        if not session.equipment_stack.push(weapon_card):
+        did_equip_weapon_card = session.equipment_stack.push(weapon_card)
+
+        if not did_equip_weapon_card:
+            logger.error('boooooo!')
             return False
 
     return True

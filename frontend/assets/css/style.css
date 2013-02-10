@@ -3,7 +3,7 @@
  */
 
 .board {
-    margin-top: 128px;
+    margin-top: 100px;
     width: 542px;
     margin-left: auto;
     margin-right: auto;
@@ -80,7 +80,7 @@
     position: relative;
     clear: both;
     left: 170px;
-    top: 150px;
+    top: 80px;
 }
 
 .health-ui {
@@ -125,7 +125,6 @@
 }
 
 .button {
-    float: left;
     position: relative;
     background-image: url('../img/button.png');
     background-repeat: no-repeat;
@@ -153,8 +152,16 @@
 }
 
 #strike-action {
+    float: left;
     top: 22px;
     left: 22px;
+}
+
+#forge-action {
+    clear: both;
+    padding-top: 12px;
+    top: 130px;
+    left: 11px;
 }
 
 /**
@@ -189,7 +196,7 @@
 }
 
 #discarded {
-    margin-bottom: 32px;
+    margin-bottom: 50px;
     transform:rotate(7deg);
     -ms-transform:rotate(7deg); /* IE 9 */
     -moz-transform:rotate(7deg); /* Firefox */

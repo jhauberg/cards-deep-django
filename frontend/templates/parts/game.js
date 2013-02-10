@@ -86,15 +86,30 @@ function onStateChanged(previous_state) {
     updateHealth();
 
     determineStrikeAvailability();
+    determineForgeAvailability();
+}
+
+function toggleButton(button, enabled) {
+    if (enabled) {
+        button.removeClass('disabled');
+    } else {
+        button.addClass('disabled');
+    }
 }
 
 function determineStrikeAvailability() {
-    if (state.stacks[1].cards.length > 0 ||
-        state.stacks[2].cards.length > 0) {
-        $('#strike-action').removeClass('disabled');
-    } else {
-        $('#strike-action').addClass('disabled');
-    }
+    toggleButton($('#strike-action'), 
+        state.stacks[1].cards.length > 0 ||
+        state.stacks[2].cards.length > 0);
+}
+
+function determineForgeAvailability() {
+    toggleButton($('#forge-action'), 
+        state.stacks[4].cards.length >= 2 &&
+        state.stacks[1].cards.length == 0);
+
+    $('#forge-action').html('FORGE<br>' + 
+        (state.stacks[4].cards.length > 0 ? '' + state.stacks[4].cards.length : ''));
 }
 
 function updateHealth() {
@@ -283,6 +298,17 @@ function drawIntoRoom(card, delay) {
     });
 }
 
+function drawIntoEquipment(card, delay) {
+    $.get('{% url card state.session_id %}?id=' + card.id, function(data) {
+        $('#forge').append(data);
+        
+        var equipment = $('#equipment');
+        var card_element = $('#card-' + card.id);
+        
+        animateMove(card_element, equipment);
+    });
+}
+
 function drawTopIntoRoom() {
     var room_stack = state.stacks[0];
     var new_card = room_stack.cards[room_stack.cards.length - 1];
@@ -416,4 +442,31 @@ $('#strike-action').mouseup(function() {
             }
         });
     });
+});
+
+$('#forge-action').mouseup(function() {
+    if ($(this).hasClass('disabled')) {
+        return;
+    }
+
+    var discarded = $('#discarded');
+
+    if (state.stacks[4].cards.length > 0) {
+        clear(state.stacks[4].id, function(response) {
+            refresh(response.state);
+
+            var new_card = state.stacks[1].cards[0];
+
+            $('#forge .card').reverse().each($).wait(50, function(index) {
+                var card = $(this);
+                var discarded = $('#discarded');
+
+                animateMove(card, discarded, function() {
+                    animateDiscard(card);
+                });
+            }).all().wait(500, function() {
+                drawIntoEquipment(new_card, 100);
+            });
+        });
+    }
 });

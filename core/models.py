@@ -105,6 +105,7 @@ def get_first_element(iterable, default=None):
     if iterable:
         for item in iterable:
             return item
+
     return default
 
 
@@ -180,10 +181,6 @@ class Stack(models.Model):
             return False
 
         return True
-
-    def clear(self):
-        # todo: should this automatically move cards to discard pile? or just delete them entirely?
-        pass
 
     def __unicode__(self):
         return u'%s' % (self.id)
