@@ -8,9 +8,9 @@ CURRENTLY NOT PLAYABLE!
 
 A web-based implementation of a [fast-paced card game](https://github.com/shrt/cards-deep-ruleset). Python and Django. 
 
-It's supposed to end up looking something like this:
+Currently looks like this:
 
-![Mockup](https://raw.github.com/shrt/cards-deep-django/master/mockup.png)
+![Screenshot](https://raw.github.com/shrt/cards-deep-django/master/screenshot.png)
 
 Card iconography comes straight off the fantastic [Game Icons](http://game-icons.net/) resource. Thank you!
 
