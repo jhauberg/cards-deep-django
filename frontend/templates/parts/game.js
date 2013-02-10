@@ -244,7 +244,7 @@ function bindCardActions(selector) {
                         animateMove(card, move_to_stack, function() {
                             refresh(response.state);
 
-                            drawIntoRoom();
+                            drawTopIntoRoom();
 
                             if (shouldBeDiscardedImmediately) {
                                 var discarded = $('#discarded');
@@ -263,18 +263,41 @@ function bindCardActions(selector) {
 
 bindCardActions('#room .card');
 
-function drawIntoRoom() {
+function drawIntoRoom(card, delay) {
+    $.get('{% url card state.session_id %}?id=' + card.id, function(data) {
+        $('#room').append(data);
+        
+        var card_element = $('#card-' + card.id);
+
+        card_element.css({
+            'left': '80px',
+            'opacity': 0
+        });
+
+        card_element.delay(delay).animate({
+            left: '0px',
+            opacity: 1
+        }, 200, function() {
+            bindCardActions(card_element);
+        });
+    });
+}
+
+function drawTopIntoRoom() {
     var room_stack = state.stacks[0];
     var new_card = room_stack.cards[room_stack.cards.length - 1];
 
-    $.get('{% url card state.session_id %}?id=' + new_card.id, function(data) {
-        $('#room').append(data).wait(500, function() {
-            
-            //animateMove(card, $('#room'));
-        });
+    drawIntoRoom(new_card);
+}
 
-        bindCardActions('#card-' + new_card.id);
-    });
+function drawAllIntoRoom() {
+    var room_stack = state.stacks[0];
+
+    for (var i = 0; i < room_stack.cards.length; i++) {
+        var card = room_stack.cards[i];
+
+        drawIntoRoom(card, 100 * i);
+    }
 }
 
 $("#map").mouseenter(
@@ -300,19 +323,18 @@ $("#map").click(
         if (state.can_skip) {
             skip(function(response) {
                 if (response.success) {
-                    $('#room .card').reverse().each($).wait(150, function(index) {
+                    refresh(response.state);
+
+                    $('#room .card').reverse().each($).wait(100, function(index) {
                         var card = $(this);
                         var discarded = $('#discarded');
 
                         animateMove(card, discarded, function() {
                             animateDiscard(card);
                         });
+                    }).all().wait(800, function() {
+                        drawAllIntoRoom();
                     });
-
-                    refresh(response.state);
-
-                    // todo: take all cards from response.state.stacks.0.cards and animate them onto the room
-                    //  * make url to retrieve rendered template of cards?
                 }
             });
 
