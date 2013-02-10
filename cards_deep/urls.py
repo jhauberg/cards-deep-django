@@ -8,6 +8,7 @@ urlpatterns = patterns('frontend.views',
     url(r'^logout/$', 'logout', name='logout'),
     url(r'^play/$', 'begin', name='begin'),
     url(r'^play/(?P<session_id>\d+)/$', 'resume', name='resume'),
+    url(r'^play/(?P<session_id>\d+)/card$', 'card', name='card'),
     url(r'^profile/$', 'preferences', name='preferences'),
     url(r'^profile/(?P<player_id>\d+)/$', 'profile', name='profile'),
 )

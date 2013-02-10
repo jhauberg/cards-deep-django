@@ -143,24 +143,6 @@ function selectMap(selected) {
     );
 }
 
-/////////
-// hooks
-
-var FIDGET_AMOUNT_DISCARD = 12;
-var FIDGET_AMOUNT = 6;
-
-$("#room .card").mouseenter(
-    function() {
-        selectCardInRoom(this, true);
-    }
-);
-
-$("#room .card").mouseleave(
-    function() {
-        selectCardInRoom(this, false);
-    }
-);
-
 function animateDiscard(card) {
     var discarded = $('#discarded');
 
@@ -203,60 +185,97 @@ function animateMove(card, stack, completed) {
 
             fidget(card, FIDGET_AMOUNT);
 
-            completed();
+            if (completed) {
+                completed();
+            }
         });
     });
 }
 
-$("#room .card").mouseup(
-    function() {
-        var card = $(this);
-        var card_id = this.id.replace('card-', '');
+/////////
+// hooks
 
-        var move_to_stack_id = -1;
-        var move_to_stack = null;
+var FIDGET_AMOUNT_DISCARD = 12;
+var FIDGET_AMOUNT = 6;
 
-        if (card.hasClass('weapon')) {
-            move_to_stack_id = state.stacks[1].id;
-            move_to_stack = $('#equipment');
-        } else if (card.hasClass('monster')) {
-            move_to_stack_id = state.stacks[2].id;
-            move_to_stack = $('#you');
-        } else if (card.hasClass('potion')) {
-            move_to_stack_id = state.stacks[2].id;
-            move_to_stack = $('#you');
-        } else if (card.hasClass('treasure')) {
-            move_to_stack_id = state.stacks[3].id;
-            move_to_stack = $('#treasure');
-        } else if (card.hasClass('scrap')) {
-            move_to_stack_id = state.stacks[4].id;
-            move_to_stack = $('#forge');
+function bindCardActions(selector) {
+    $(selector).mouseenter(
+        function() {
+            selectCardInRoom($(this), true);
         }
+    );
 
-        if ((card != null && card_id != -1) && 
-            (move_to_stack != null && move_to_stack_id != -1)) {
-            move(card_id, move_to_stack_id, function(response) {
-                if (response.success) {
-                    var shouldBeDiscardedImmediately = 
-                        (card.hasClass('monster') && state.stacks[1].cards.length == 0) ||
-                        (card.hasClass('potion'));
-
-                    animateMove(card, move_to_stack, function() {
-                        refresh(response.state);
-
-                        if (shouldBeDiscardedImmediately) {
-                            var discarded = $('#discarded');
-
-                            animateMove(card, discarded, function() {
-                                animateDiscard(card);
-                            });
-                        }
-                    });   
-                }
-            });
+    $(selector).mouseleave(
+        function() {
+            selectCardInRoom($(this), false);
         }
-    }
-);
+    );
+
+    $(selector).mouseup(
+        function() {
+            var card = $(this);
+            var card_id = this.id.replace('card-', '');
+
+            var move_to_stack_id = -1;
+            var move_to_stack = null;
+
+            if (card.hasClass('weapon')) {
+                move_to_stack_id = state.stacks[1].id;
+                move_to_stack = $('#equipment');
+            } else if (card.hasClass('monster') || card.hasClass('potion')) {
+                move_to_stack_id = state.stacks[2].id;
+                move_to_stack = $('#you');
+            } else if (card.hasClass('treasure')) {
+                move_to_stack_id = state.stacks[3].id;
+                move_to_stack = $('#treasure');
+            } else if (card.hasClass('scrap')) {
+                move_to_stack_id = state.stacks[4].id;
+                move_to_stack = $('#forge');
+            }
+
+            if ((card != null && card_id != -1) && 
+                (move_to_stack != null && move_to_stack_id != -1)) {
+                move(card_id, move_to_stack_id, function(response) {
+                    if (response.success) {
+                        var shouldBeDiscardedImmediately = 
+                            (card.hasClass('monster') && state.stacks[1].cards.length == 0) ||
+                            (card.hasClass('potion'));
+
+                        animateMove(card, move_to_stack, function() {
+                            refresh(response.state);
+
+                            drawIntoRoom();
+
+                            if (shouldBeDiscardedImmediately) {
+                                var discarded = $('#discarded');
+
+                                animateMove(card, discarded, function() {
+                                    animateDiscard(card);
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    );
+}
+
+bindCardActions('#room .card');
+
+function drawIntoRoom() {
+    var room_stack = state.stacks[0];
+    var new_card = room_stack.cards[room_stack.cards.length - 1];
+
+    $.get('{% url card state.session_id %}?id=' + new_card.id, function(data) {
+        $('#room').append(data).wait(500, function() {
+            
+            //animateMove(card, $('#room'));
+        });
+
+        bindCardActions('#card-' + new_card.id);
+    });
+}
 
 $("#map").mouseenter(
     function() {

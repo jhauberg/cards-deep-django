@@ -1,15 +1,19 @@
+{% load core_helpers %}
+
 {% if card %}
 
-    <div class="card-front">
-        <div class="value">
+    {% if backside %}
 
-            {% if card.details.value %}
+        <li class="card" id="card-{{ card.id }}"></li>
 
-                {{ card.details.value }}{% if card.is_special %}*{% endif %}
-                
-            {% endif %}
+    {% else %}
+    
+        <li class="card {{ card.details.kind|kind_name }}" id="card-{{ card.id }}">
 
-        </div>
-    </div>
+            {% include 'parts/card-detail.html' with card=card only %}
+
+        </li>
+
+    {% endif %}
 
 {% endif %}

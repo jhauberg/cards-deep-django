@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from django.contrib.auth import logout as auth_logout, authenticate, login as auth_login
 
-from core.models import Player
+from core.models import Player, Card
 from core.views import start_new_session, get_current_state
 
 
@@ -123,6 +123,24 @@ def resume(request, session_id):
         request,
         'board.html', {
             'state': state
+        }
+    )
+
+
+def card(request, session_id):
+    try:
+        card_id = request.GET['id']
+        card = Card.objects.get(pk=card_id)
+    except Card.DoesNotExist:
+        card = None
+
+    if card is None:
+        return HttpResponse(status=500)
+
+    return render(
+        request,
+        'parts/card.html', {
+            'card': card
         }
     )
 

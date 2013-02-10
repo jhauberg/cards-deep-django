@@ -1,0 +1,11 @@
+<div class="card-front">
+    <div class="value">
+
+        {% if card.details.value %}
+
+            {{ card.details.value }}{% if card.is_special %}*{% endif %}
+            
+        {% endif %}
+
+    </div>
+</div>
