@@ -357,9 +357,12 @@ def activate_card(session, card):
 
             if damage > 0:
                 try:
-                    # todo: need to figure out what happens in terms of rollover..
-                    # since `health` is unsigned small int does it roll over to maxval when going below 0, like in c?
-                    session.health -= damage
+                    new_health = session.health - damage
+
+                    if new_health < 0:
+                        new_health = 0
+
+                    session.health = new_health
                     session.save()
                 except:
                     return False
