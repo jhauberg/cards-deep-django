@@ -234,10 +234,15 @@ def activate_stack(session, stack):
         return False
 
     if stack == session.equipment_stack or stack == session.you_stack:
-        # todo: discard all and score points
         discard_many(session, session.equipment_stack.get_all_cards())
 
-        score = discard_many(session, session.you_stack.get_all_cards())
+        monster_cards = session.you_stack.get_all_cards()
+        monster_cards_discarded = discard_many(session, monster_cards)
+
+        score = monster_cards_discarded * monster_cards_discarded
+
+        session.score += score
+        session.save()
 
     if stack == session.forge_stack:
         # Draw a new weapon card that is valued depending on how many cards were spent.
@@ -348,6 +353,9 @@ def activate_card(session, card):
 
         if not most_recently_played_weapon_card:
             # Monsters only stack if player has a weapon equipped
+            session.score += 1
+            session.save()
+
             discard(session, card)
 
     return True

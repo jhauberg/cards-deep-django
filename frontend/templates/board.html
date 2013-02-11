@@ -8,9 +8,13 @@
 
         {% if state %}
 
-            <div class="menu">
-                <a href="#" id="help">How To Play</a>
-                <a href="#" id="stats">Statistics</a>
+            <div class="header">
+                <ul class="menu">
+                    <li class="menu-item"><a href="#" id="help">How To Play</a></li>
+                    <li class="menu-item"><a href="#" id="stats">Statistics</a></li>
+                </ul>
+
+
             </div>
 
             <div class="board">
@@ -20,6 +24,10 @@
 
                 </ul>
                 
+                <div class="scoreboard">
+                    <div class="scoreboard-value">{{ state.score }}</div>
+                </div>
+
                 <ul class="stack" id="room">
 
                     {% include 'parts/stack.html' with stack=state.stacks.0 only %}
@@ -53,8 +61,8 @@
 
                         </ul>
 
-                        <div class="button {% if state.stacks.1.cards|length == 0 or state.stacks.2.cards|length == 0 %} disabled {% endif %}" id="strike-action">
-                            STRIKE
+                        <div class="button {% if state.stacks.1.cards|length == 0 %} disabled {% endif %}" id="strike-action">
+                            STRIKE<br>{% if state.stacks.1.cards|length > 0 and state.stacks.2.cards|length > 0 %}{{ state.stacks.2.cards|length }}{% endif %}
                         </div>
 
                         <ul class="card stack" id="you">

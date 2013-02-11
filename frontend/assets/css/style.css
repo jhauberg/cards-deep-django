@@ -1,12 +1,31 @@
-.menu {
-    margin-top: 20px;
+.header {
     width: 542px;
+    margin-top: 12px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.menu a {
-    margin-right: 6px;
+.menu {
+    float: left;
+    list-style-type: none;
+    margin-bottom: 60px;
+    padding: 0px;
+}
+
+.menu-item {
+    display: inline;
+    margin-right: 8px;
+}
+
+.scoreboard {
+    float: right;
+    cursor: default;
+    position: relative;
+}
+
+.scoreboard-value {
+    font-weight: bold;
+    font-size: 3.5em;
 }
 
 /**
@@ -14,6 +33,7 @@
  */
 
 .board {
+    clear: both;
     margin-top: 70px;
     width: 542px;
     margin-left: auto;
@@ -164,6 +184,7 @@
 
 #strike-action {
     float: left;
+    padding-top: 12px;
     top: 22px;
     left: 22px;
 }
@@ -180,6 +201,7 @@
  */
 
 #room {
+    clear: both;
     float: left;
 }
 
@@ -208,6 +230,7 @@
 
 #discarded {
     margin-bottom: 50px;
+    float: left;
     transform:rotate(7deg);
     -ms-transform:rotate(7deg); /* IE 9 */
     -moz-transform:rotate(7deg); /* Firefox */

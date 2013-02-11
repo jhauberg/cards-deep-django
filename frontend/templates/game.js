@@ -83,6 +83,7 @@ function fidget(element, range) {
 var state = {}
 
 function onStateChanged(previous_state) {
+    updateScore();
     updateHealth();
 
     determineStrikeAvailability();
@@ -99,8 +100,12 @@ function toggleButton(button, enabled) {
 
 function determineStrikeAvailability() {
     toggleButton($('#strike-action'), 
-        state.stacks[1].cards.length > 0 ||
-        state.stacks[2].cards.length > 0);
+        state.stacks[1].cards.length > 0);
+
+    $('#strike-action').html('STRIKE<br>' + 
+        (state.stacks[1].cards.length > 0 && state.stacks[2].cards.length > 0 ? 
+            '' + state.stacks[2].cards.length : 
+            ''));
 }
 
 function determineForgeAvailability() {
@@ -118,6 +123,10 @@ function updateHealth() {
 
     $('.health-bar').css("width", amount_in_pixels);
     $('.health-ui .value').text(new_health_amount);
+}
+
+function updateScore() {
+    $('.scoreboard .scoreboard-value').text('' + state.score);
 }
 
 function refresh(newState) {

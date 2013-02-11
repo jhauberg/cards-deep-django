@@ -56,6 +56,8 @@ class Session(models.Model):
     forge_stack = models.ForeignKey('Stack', related_name='forge_stack')
     discard_stack = models.ForeignKey('Stack', related_name='discard_stack')
 
+    score = models.IntegerField(default=0)
+
     def __unicode__(self):
         return u'%s with Health: %s' % (self.belongs_to_player, self.health)
 
