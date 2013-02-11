@@ -10,6 +10,9 @@ import random
 ROOM_CAPACITY = 5
 REQUIRED_TURNS_BEFORE_SKIPPING = 5
 
+TREASURE_CAPACITY = 10
+FORGE_CAPACITY = 10
+DISCARD_CAPACITY = 10
 
 def roll(min, max):
     return random.randint(min, max)
@@ -397,7 +400,7 @@ def can_move(session, card, to_stack):
             logger.error(' * only treasure cards can be moved here!')
             return False
 
-        if len(session.treasure_stack.get_all_cards()) >= 10:
+        if len(session.treasure_stack.get_all_cards()) >= TREASURE_CAPACITY:
             # Treasure stack already holds maximum amount of treasure
             logger.error(' * max treasure reached!')
             return False
@@ -408,7 +411,7 @@ def can_move(session, card, to_stack):
             logger.error(' * only scrap cards can be moved here!')
             return False
 
-        if len(session.forge_stack.get_all_cards()) >= 10:
+        if len(session.forge_stack.get_all_cards()) >= FORGE_CAPACITY:
             # Forge stack already holds maximum amount of scraps
             logger.error(' * max scraps reached!')
             return False
@@ -513,7 +516,7 @@ def discard(session, card):
         logger.info('    success!')
         all_discarded_cards = session.discard_stack.get_all_cards()
 
-        if all_discarded_cards.count() >= 10:
+        if all_discarded_cards.count() >= DISCARD_CAPACITY:
             oldest_discarded_card = all_discarded_cards.reverse()[:1][0]
 
             oldest_discarded_card.stack = None
