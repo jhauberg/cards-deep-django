@@ -317,9 +317,6 @@ def can_activate_card(session, card):
 
     return True
 
-
-HEALTH_CAPACITY = 20
-
 def activate_card(session, card):
     """
     Attempts activating a card.
