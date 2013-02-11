@@ -244,6 +244,10 @@ def activate_stack(session, stack):
         session.score += score
         session.save()
 
+    if stack == session.treasure_stack:
+        # apply multiplier to strike (i.e. score = (monsters * monsters) * treasures)
+        pass
+
     if stack == session.forge_stack:
         # Draw a new weapon card that is valued depending on how many cards were spent.
 

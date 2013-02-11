@@ -191,9 +191,17 @@
 
 #forge-action {
     clear: both;
+    float: left;
     padding-top: 12px;
     top: 130px;
     left: 11px;
+}
+
+#treasure-action {
+    float: right;
+    padding-top: 12px;
+    top: 130px;
+    right: 11px;
 }
 
 /**

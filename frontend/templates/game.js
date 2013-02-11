@@ -479,3 +479,26 @@ $('#forge-action').mouseup(function() {
         });
     }
 });
+
+$('#treasure-action').mouseup(function() {
+    if ($(this).hasClass('disabled')) {
+        return;
+    }
+
+    var discarded = $('#discarded');
+
+    if (state.stacks[3].cards.length > 0) {
+        clear(state.stacks[3].id, function(response) {
+            refresh(response.state);
+            
+            $('#treasure .card').reverse().each($).wait(50, function(index) {
+                var card = $(this);
+                var discarded = $('#discarded');
+
+                animateMove(card, discarded, function() {
+                    animateDiscard(card);
+                });
+            };
+        });
+    }
+});
