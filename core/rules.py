@@ -7,12 +7,15 @@ from models import CARD_KIND_WEAPON, CARD_KIND_POTION, CARD_KIND_MONSTER, CARD_K
 
 import random
 
-ROOM_CAPACITY = 5
+HEALTH_CAPACITY = 20
+
 REQUIRED_TURNS_BEFORE_SKIPPING = 5
 
+ROOM_CAPACITY = 5
 TREASURE_CAPACITY = 10
 FORGE_CAPACITY = 10
 DISCARD_CAPACITY = 10
+
 
 def roll(min, max):
     return random.randint(min, max)
@@ -75,6 +78,8 @@ def start(player):
 
     # Begin a new session.
     session = Session(
+        health=HEALTH_CAPACITY,
+
         # Important to note that a session has to be tied to a player. Same goes for
         # cards and stacks; they must, ultimately, be tied to a session. Otherwise
         # it would be possible to move cards between sessions.
@@ -313,6 +318,8 @@ def can_activate_card(session, card):
     return True
 
 
+HEALTH_CAPACITY = 20
+
 def activate_card(session, card):
     """
     Attempts activating a card.
@@ -330,8 +337,8 @@ def activate_card(session, card):
 
         current_health += restored_health
 
-        if current_health > 20:
-            current_health = 20
+        if current_health > HEALTH_CAPACITY:
+            current_health = HEALTH_CAPACITY
 
         try:
             session.health = current_health
