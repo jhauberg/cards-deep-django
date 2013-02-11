@@ -57,6 +57,7 @@ class Session(models.Model):
     discard_stack = models.ForeignKey('Stack', related_name='discard_stack')
 
     score = models.IntegerField(default=0)
+    score_multiplier = models.IntegerField(default=1)
 
     def __unicode__(self):
         return u'%s with Health: %s' % (self.belongs_to_player, self.health)

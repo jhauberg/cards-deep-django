@@ -239,13 +239,22 @@ def activate_stack(session, stack):
         monster_cards = session.you_stack.get_all_cards()
         monster_cards_discarded = discard_many(session, monster_cards)
 
-        score = monster_cards_discarded * monster_cards_discarded
+        score = monster_cards_discarded * monster_cards_discarded * session.score_multiplier
 
         session.score += score
+        session.score_multiplier = 1
         session.save()
 
     if stack == session.treasure_stack:
         # apply multiplier to strike (i.e. score = (monsters * monsters) * treasures)
+        treasure_cards = session.treasure_stack.get_all_cards()
+        treasure_cards_discarded = discard_many(session, treasure_cards)
+
+        score_multiplier = treasure_cards_discarded
+
+        session.score_multiplier += score_multiplier
+        session.save()
+
         pass
 
     if stack == session.forge_stack:

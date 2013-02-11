@@ -62,7 +62,7 @@
                         </ul>
 
                         <div class="button {% if state.stacks.1.cards|length == 0 %} disabled {% endif %}" id="strike-action">
-                            STRIKE<br>{% if state.stacks.1.cards|length > 0 and state.stacks.2.cards|length > 0 %}{{ state.stacks.2.cards|length }}{% endif %}
+                            STRIKE<br>{% if state.stacks.1.cards|length > 0 and state.stacks.2.cards|length > 0 %}{{ state.stacks.2.cards|length }}{% endif %}{% if state.score_multiplier > 1 %} * {{ state.score_multiplier }}{% endif %}
                         </div>
 
                         <ul class="card stack" id="you">

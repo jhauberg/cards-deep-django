@@ -73,6 +73,7 @@ def current_state(session):
         'session_id': session.id,
         'health': int(session.health),
         'score': int(session.score),
+        'score_multiplier': int(session.score_multiplier),
         'can_skip': can_skip(session),
         'can_skip_on_next_move': can_skip_on_next_move(session),
         'stacks': [

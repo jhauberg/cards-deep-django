@@ -88,6 +88,7 @@ function onStateChanged(previous_state) {
 
     determineStrikeAvailability();
     determineForgeAvailability();
+    determineBuffAvailability();
 }
 
 function toggleButton(button, enabled) {
@@ -102,10 +103,15 @@ function determineStrikeAvailability() {
     toggleButton($('#strike-action'), 
         state.stacks[1].cards.length > 0);
 
-    $('#strike-action').html('STRIKE<br>' + 
-        (state.stacks[1].cards.length > 0 && state.stacks[2].cards.length > 0 ? 
-            '' + state.stacks[2].cards.length : 
-            ''));
+    var strike_amount = 
+        state.stacks[1].cards.length > 0 && 
+        state.stacks[2].cards.length > 0 ? 
+            state.stacks[2].cards.length : 0;
+
+    $('#strike-action').html(
+        'STRIKE<br>' + 
+        (strike_amount > 0 ? strike_amount : '') +
+        (state.score_multiplier > 1 ? ' * ' + state.score_multiplier : ''));
 }
 
 function determineForgeAvailability() {
@@ -115,6 +121,14 @@ function determineForgeAvailability() {
 
     $('#forge-action').html('FORGE<br>' + 
         (state.stacks[4].cards.length > 0 ? '' + state.stacks[4].cards.length : ''));
+}
+
+function determineBuffAvailability() {
+    toggleButton($('#treasure-action'), 
+        state.stacks[3].cards.length > 0);
+
+    $('#treasure-action').html('BUFF<br>' + 
+        (state.stacks[3].cards.length > 0 ? '' + state.stacks[3].cards.length : ''));
 }
 
 function updateHealth() {
@@ -490,7 +504,7 @@ $('#treasure-action').mouseup(function() {
     if (state.stacks[3].cards.length > 0) {
         clear(state.stacks[3].id, function(response) {
             refresh(response.state);
-            
+
             $('#treasure .card').reverse().each($).wait(50, function(index) {
                 var card = $(this);
                 var discarded = $('#discarded');
@@ -498,7 +512,7 @@ $('#treasure-action').mouseup(function() {
                 animateMove(card, discarded, function() {
                     animateDiscard(card);
                 });
-            };
+            });
         });
     }
 });
