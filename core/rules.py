@@ -7,6 +7,7 @@ from models import CARD_KIND_WEAPON, CARD_KIND_POTION, CARD_KIND_MONSTER, CARD_K
 
 import random
 
+ROOM_CAPACITY = 5
 REQUIRED_TURNS_BEFORE_SKIPPING = 5
 
 
@@ -87,7 +88,7 @@ def start(player):
     session.save()
 
     # Draw the first 5 cards.
-    initial_room_cards = draw(session, 5)
+    initial_room_cards = draw(session, ROOM_CAPACITY)
 
     # Put the initial cards in place.
     room_stack.push_many(initial_room_cards)
@@ -555,14 +556,13 @@ def skip(session):
 
     if can_skip(session):
         room_cards = session.room_stack.get_all_cards()
-        logger.info('skipping %d cards...' % (len(room_cards)))
-        amount_discarded = discard_many(session, room_cards)
-        logger.info('discarded %d cards!' % (amount_discarded))
 
-        # if amount_discarded > 0:
-        #     replacement_cards = draw(session, amount_discarded)
-        #     logger.info('%d new cards were drawn...' % (len(replacement_cards)))
-        #     session.room_stack.push_many(replacement_cards)
+        logger.info('skipping %d cards...' % (len(room_cards)))
+
+        # Note that a new card is drawn into the room automatically for each successful discard
+        amount_discarded = discard_many(session, room_cards)
+
+        logger.info('discarded %d cards!' % (amount_discarded))
 
         try:
             session.amount_of_cards_moved_since_last_skip = 0
