@@ -3,6 +3,9 @@
 *.pyc
 local_settings.py
 
+# osx
+.DS_Store
+
 # generated
 nectar.db
 cards_deep/logs/errors.log
