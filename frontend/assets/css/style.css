@@ -25,6 +25,7 @@
 
 .scoreboard-value {
     font-weight: bold;
+    margin-right: 12px;
     font-size: 3.5em;
 }
 
@@ -111,7 +112,7 @@
     position: relative;
     clear: both;
     left: 170px;
-    top: 80px;
+    top: 60px;
 }
 
 .health-ui {
@@ -193,14 +194,14 @@
     clear: both;
     float: left;
     padding-top: 12px;
-    top: 130px;
+    top: 110px;
     left: 11px;
 }
 
 #treasure-action {
     float: right;
     padding-top: 12px;
-    top: 130px;
+    top: 110px;
     right: 11px;
 }
 
@@ -237,7 +238,7 @@
 }
 
 #discarded {
-    margin-bottom: 50px;
+    margin-bottom: 40px;
     float: left;
     transform:rotate(7deg);
     -ms-transform:rotate(7deg); /* IE 9 */
@@ -253,7 +254,7 @@
 #action-stacks {
     clear: both;
     position: relative;
-    top: 80px;
+    top: 50px;
 }
 
 #equipment {
@@ -296,4 +297,9 @@
 
 #treasure .card {
     position: absolute;
+}
+
+#hint-skip {
+    margin-top: 16px;
+    float: right;
 }

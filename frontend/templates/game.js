@@ -85,6 +85,7 @@ var state = {}
 function onStateChanged(previous_state) {
     updateScore();
     updateHealth();
+    updateHint();
 
     determineStrikeAvailability();
     determineForgeAvailability();
@@ -141,6 +142,14 @@ function updateHealth() {
 
 function updateScore() {
     $('.scoreboard .scoreboard-value').text('' + state.score);
+}
+
+function updateHint() {
+    var hint = $('#hint-skip');
+
+    hint.css({
+        'visibility': (state.can_skip_on_next_move ? 'visible' : 'hidden')
+    });
 }
 
 function refresh(newState) {
@@ -507,10 +516,13 @@ $('#treasure-action').mouseup(function() {
 
             $('#treasure .card').reverse().each($).wait(50, function(index) {
                 var card = $(this);
+                var strike_button = $('#strike-action');
                 var discarded = $('#discarded');
 
-                animateMove(card, discarded, function() {
-                    animateDiscard(card);
+                animateMove(card, strike_button, function() {
+                    animateMove(card, discarded, function() {
+                        animateDiscard(card);
+                    });
                 });
             });
         });

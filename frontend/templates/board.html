@@ -39,6 +39,10 @@
                     <li class="card" id="map-top"></li>
                 </ul>
 
+                <div id="hint-skip" style="{% if not state.can_skip_on_next_move %}visibility: hidden;{% endif %}">
+                    You can skip on the next turn
+                </div>
+
                 <div id="action-stacks">
                     <div id="secondary">
                         <ul class="card stack" id="forge">
