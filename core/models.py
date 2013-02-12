@@ -83,6 +83,7 @@ class Card(models.Model):
     # the same kind, but without duplicating data.
     details = models.ForeignKey('CardDetail')
     stack = models.ForeignKey('Stack', null=True)
+    order_in_stack = models.IntegerField(default=-1)
     is_special = models.BooleanField(default=False)  # Any card has a chance to be special...
 
     def can_be_moved(self, to_stack):
@@ -131,10 +132,11 @@ class Stack(models.Model):
         return False
 
     def get_bottom(self):
-        return get_first_element(Card.objects.filter(stack=self).reverse()[:1])
+        #return get_first_element(Card.objects.filter(stack=self).reverse()[:1])
+        return get_first_element(Card.objects.filter(stack=self).order_by('order_in_stack')[:1])
 
     def get_top(self):
-        return get_first_element(Card.objects.filter(stack=self)[:1])
+        return get_first_element(Card.objects.filter(stack=self).order_by('-order_in_stack')[:1])
 
     def get_all_cards(self):
         return Card.objects.filter(stack=self)
@@ -148,6 +150,7 @@ class Stack(models.Model):
     def push(self, card):
         try:
             card.stack = self
+            card.order_in_stack = self.count()
             card.save()
         except:
             return False
@@ -169,6 +172,7 @@ class Stack(models.Model):
         if card in cards:
             try:
                 card.stack = None
+                card.order_in_stack = -1
                 card.save()
             except:
                 return False

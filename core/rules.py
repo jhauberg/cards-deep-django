@@ -445,14 +445,15 @@ def can_move(session, card, to_stack):
             most_recently_played_monster_card = session.you_stack.get_top()
 
             if most_recently_played_monster_card is not None:
-                if card.details.value >= most_recently_played_monster_card.details.value:
+                if most_recently_played_monster_card.details.value <= card.details.value:
                     most_recently_played_weapon_card = session.equipment_stack.get_top()
 
-                    if most_recently_played_weapon_card and not most_recently_played_weapon_card.is_special:
+                    if most_recently_played_weapon_card and most_recently_played_weapon_card.is_special:
                         # Basically, you can only place monsters of higher value on other monsters if
                         # the current weapon is special.
-                        logger.error(' * requires special weapon equipped to do this!')
-                        return False
+                        return True
+
+                    return False
 
     return True
 
