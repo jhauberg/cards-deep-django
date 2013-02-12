@@ -552,3 +552,17 @@ $('#treasure-action').mouseup(function() {
         });
     }
 });
+
+function toggleVisibility(element) {
+    if (element.css('visibility') == 'hidden') {
+        element.css('visibility', 'visible');
+    } else {
+        element.css('visibility', 'hidden');
+    }
+}
+
+$('#help').mouseup(function() {
+    var manual = $('.manual');
+
+    toggleVisibility(manual);
+});

@@ -305,3 +305,35 @@
     margin-top: 16px;
     float: right;
 }
+
+.manual {
+    visibility: hidden;
+    margin-top: -10px;
+    margin-left: 24px;
+    width: 400px;
+    height: 0;
+    float: left;
+}
+
+.manual-header {
+    margin-bottom: 40px;
+}
+
+.manual-header p {
+    color: #000;
+    font-size: 1.6em;
+}
+
+.manual-header h1 {
+    font-weight: bold;
+    font-size: 2.1em;
+}
+
+.manual-game {
+    margin-bottom: 80px;
+    font-size: 1.5em;
+}
+
+.manual-tips {
+    font-size: 1.2em;
+}
