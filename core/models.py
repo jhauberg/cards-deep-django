@@ -132,7 +132,6 @@ class Stack(models.Model):
         return False
 
     def get_bottom(self):
-        #return get_first_element(Card.objects.filter(stack=self).reverse()[:1])
         return get_first_element(Card.objects.filter(stack=self).order_by('order_in_stack')[:1])
 
     def get_top(self):
