@@ -144,12 +144,36 @@ function updateScore() {
     $('.scoreboard .scoreboard-value').text('' + state.score);
 }
 
+var didShowHintLastMove = false;
+
 function updateHint() {
     var hint = $('#hint-skip');
 
-    hint.css({
-        'visibility': (state.can_skip_on_next_move ? 'visible' : 'hidden')
-    });
+    if (state.can_skip_on_next_move) {
+        didShowHintLastMove = true;
+
+        hint.css({
+            'top': '-16px',
+            'visibility': 'visible',
+            'opacity': 0
+        });
+
+        hint.animate({
+            opacity: 1,
+            top: 0
+        }, 200);
+    } else if (didShowHintLastMove) {
+        didShowHintLastMove = false;
+
+        hint.animate({
+            opacity: 0,
+            top: '-16px'
+        }, 200, function() {
+            hint.css({
+                'visibility': 'hidden'
+            });
+        });
+    }
 }
 
 function refresh(newState) {

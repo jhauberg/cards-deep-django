@@ -222,6 +222,7 @@
 /**
  * The stack that new cards are drawn from. 
  */
+
 #map {
     float: right;
 }
@@ -300,6 +301,7 @@
 }
 
 #hint-skip {
+    position: relative;
     margin-top: 16px;
     float: right;
 }
