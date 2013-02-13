@@ -561,7 +561,7 @@ function toggleVisibility(element) {
     }
 }
 
-$('#help').mouseup(function() {
+$('#menu-help').mouseup(function() {
     var manual = $('.manual');
 
     toggleVisibility(manual);

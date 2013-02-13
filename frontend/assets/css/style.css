@@ -337,3 +337,7 @@
 .manual-tips {
     font-size: 0.9em;
 }
+
+#menu-stats {
+    opacity: 0.4;
+}
