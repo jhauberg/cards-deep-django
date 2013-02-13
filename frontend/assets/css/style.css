@@ -310,7 +310,7 @@
     visibility: hidden;
     margin-top: -10px;
     margin-left: 24px;
-    width: 400px;
+    width: 380px;
     height: 0;
     float: left;
 }
@@ -321,19 +321,19 @@
 
 .manual-header p {
     color: #000;
-    font-size: 1.6em;
+    font-size: 1.4em;
 }
 
 .manual-header h1 {
     font-weight: bold;
-    font-size: 2.1em;
+    font-size: 1.8em;
 }
 
 .manual-game {
     margin-bottom: 80px;
-    font-size: 1.5em;
+    font-size: 1.2em;
 }
 
 .manual-tips {
-    font-size: 1.2em;
+    font-size: 0.9em;
 }
