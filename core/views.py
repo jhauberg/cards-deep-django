@@ -83,7 +83,10 @@ def current_state(session):
             { 'name': 'treasure', 'id': session.treasure_stack.id, 'cards': current_treasure_cards },
             { 'name': 'forge', 'id': session.forge_stack.id, 'cards': current_forge_cards },
             { 'name': 'discarded', 'id': session.discard_stack.id, 'cards': currently_discarded_cards }
-        ]
+        ],
+        'stats': {
+            'cards_drawn_total': int(session.belongs_to_player.statistics.cards_drawn)
+        }
     }
 
 

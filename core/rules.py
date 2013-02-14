@@ -164,6 +164,9 @@ def draw_single(session, properties=None):
         )
 
         card.save()
+
+        session.belongs_to_player.statistics.cards_drawn += 1
+        session.belongs_to_player.statistics.save()
     except:
         return None
 

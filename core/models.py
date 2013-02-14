@@ -23,6 +23,7 @@ CARD_KINDS = (
 class Player(models.Model):
     user = models.OneToOneField(User)
     active_session = models.OneToOneField('Session', null=True, blank=True)
+    statistics = models.OneToOneField('Statistics')
 
     def __unicode__(self):
         if self.user.first_name and self.user.last_name:
@@ -37,7 +38,15 @@ def create_player(sender, instance, created, **kwargs):
     Create a matching profile whenever a user object is created.
     """
     if created:
-        profile, new = Player.objects.get_or_create(user=instance)
+        try:
+            stats = Statistics()
+            stats.save()
+        except:
+            stats = None
+
+        profile, new = Player.objects.get_or_create(
+            user=instance,
+            statistics=stats)
 
 
 class Session(models.Model):
@@ -79,12 +88,16 @@ class CardDetail(models.Model):
 
 class Card(models.Model):
     belongs_to_session = models.ForeignKey('Session')
+
+    stack = models.ForeignKey('Stack', null=True)
+    order_in_stack = models.IntegerField(default=-1)
+
     # Separating the properties into its own table allows us to have several cards of
     # the same kind, but without duplicating data.
     details = models.ForeignKey('CardDetail')
-    stack = models.ForeignKey('Stack', null=True)
-    order_in_stack = models.IntegerField(default=-1)
-    is_special = models.BooleanField(default=False)  # Any card has a chance to be special...
+
+    # Any card has a chance to be special...
+    is_special = models.BooleanField(default=False)
 
     def can_be_moved(self, to_stack):
         if self.stack:
@@ -114,9 +127,6 @@ def get_first_element(iterable, default=None):
 
 
 class Stack(models.Model):
-    # todo: orderby! a stack is not just a pile of cards, it's a list of cards in a specific order
-    # cards probably need to have a field that specified this order, because cards can be put
-    # into any stack, and would then not be orderable just by pk alone..
     is_editable = models.BooleanField(default=True)
 
     def belongs_to_session(self, session):
@@ -187,6 +197,13 @@ class Stack(models.Model):
             return False
 
         return True
+
+    def __unicode__(self):
+        return u'%s' % (self.id)
+
+
+class Statistics(models.Model):
+    cards_drawn = models.IntegerField(default=0)
 
     def __unicode__(self):
         return u'%s' % (self.id)
