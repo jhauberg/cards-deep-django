@@ -563,6 +563,18 @@ function toggleVisibility(element) {
 
 $('#menu-help').mouseup(function() {
     var manual = $('.manual');
+    var stats = $('.stats');
+
+    stats.css('visibility', 'hidden');
 
     toggleVisibility(manual);
+});
+
+$('#menu-stats').mouseup(function() {
+    var manual = $('.manual');
+    var stats = $('.stats');
+
+    manual.css('visibility', 'hidden');
+
+    toggleVisibility(stats);
 });

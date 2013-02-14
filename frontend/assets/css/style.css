@@ -183,28 +183,6 @@
     cursor: default;
 }
 
-#strike-action {
-    float: left;
-    padding-top: 12px;
-    top: 22px;
-    left: 22px;
-}
-
-#forge-action {
-    clear: both;
-    float: left;
-    padding-top: 12px;
-    top: 110px;
-    left: 11px;
-}
-
-#treasure-action {
-    float: right;
-    padding-top: 12px;
-    top: 110px;
-    right: 11px;
-}
-
 /**
  * All cards in the room stack are laid out from left to right.
  */
@@ -306,6 +284,32 @@
     float: right;
 }
 
+#strike-action {
+    float: left;
+    padding-top: 12px;
+    top: 22px;
+    left: 22px;
+}
+
+#forge-action {
+    clear: both;
+    float: left;
+    padding-top: 12px;
+    top: 110px;
+    left: 11px;
+}
+
+#treasure-action {
+    float: right;
+    padding-top: 12px;
+    top: 110px;
+    right: 11px;
+}
+
+/**
+ * The `How to Play` section.
+ */
+
 .manual {
     visibility: hidden;
     margin-top: -10px;
@@ -338,6 +342,10 @@
     font-size: 0.9em;
 }
 
-#menu-stats {
-    opacity: 0.4;
+/**
+ * The `Statistics` section.
+ */
+
+.stats {
+    visibility: hidden;
 }
