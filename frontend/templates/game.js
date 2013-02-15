@@ -110,7 +110,7 @@ function onStateChanged(previous_state) {
 
         $('.card').unbind('mouseup mouseenter mouseleave');
         $('.health').css('opacity', 0.4);
-        
+
         $('#you li').last().append('<div id="killer-label">Your killer!</div>');
     }
 }
@@ -611,4 +611,17 @@ $('#menu-stats').mouseup(function() {
     manual.css('visibility', 'hidden');
 
     toggleVisibility(stats);
+});
+
+$('#menu-next').mouseup(function() {
+    $.post("{% url begin %}", 
+        { 
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+        },
+        function(response) {
+            window.location.href = window.location.href.replace(
+                '/play/{{ state.session_id }}', 
+                '/play/{{ state.session_id|add:"1" }}');
+        }
+    );
 });
