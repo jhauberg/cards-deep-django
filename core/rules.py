@@ -522,13 +522,12 @@ def discard(session, card):
 
     if move(session, card, session.discard_stack):
         logger.info('    success!')
-        all_discarded_cards = session.discard_stack.get_all_cards()
 
-        if all_discarded_cards.count() >= DISCARD_CAPACITY:
-            oldest_discarded_card = all_discarded_cards.reverse()[:1][0]
+        if session.discard_stack.count() > DISCARD_CAPACITY:
+            oldest_discarded_card = session.discard_stack.get_bottom()
 
-            oldest_discarded_card.stack = None
-            oldest_discarded_card.save()
+            if not session.discard_stack.pop_specific(oldest_discarded_card):
+                return False
 
         return True
 
@@ -546,8 +545,10 @@ def discard_many(session, cards):
 
     for card in cards:
         logger.info('discarding %s' % (card))
+
         if discard(session, card):
             logger.info('  success!')
+
             amount_discarded += 1
         else:
             logger.info('  fail!')
@@ -603,6 +604,8 @@ def skip(session):
             session.amount_of_cards_moved_since_last_skip = 0
             session.save()
         except:
+            logger.error(' * could not save session properly!')
+
             return False
 
         return True
