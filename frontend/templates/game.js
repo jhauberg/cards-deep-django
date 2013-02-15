@@ -83,6 +83,24 @@ function fidget(element, range) {
 var state = {}
 
 function onStateChanged(previous_state) {
+    if (state.is_lost) {
+        var strikeButton = $('#strike-action');
+        var forgeButton = $('#forge-action');
+        var treasureButton = $('#treasure-action');
+
+        if (!strikeButton.hasClass('disabled')) {
+            strikeButton.addClass('disabled');
+        }
+
+        if (!forgeButton.hasClass('disabled')) {
+            forgeButton.addClass('disabled');
+        }
+
+        if (!treasureButton.hasClass('disabled')) {
+            treasureButton.addClass('disabled');
+        }
+    }
+
     updateScore();
     updateHealth();
     updateHint();
@@ -472,23 +490,11 @@ $('#strike-action').mouseup(function() {
     var discarded = $('#discarded');
 
     clear(state.stacks[1].id, function(response) {
-        if (state.stacks[1].cards.length > 0) {
-            $('#equipment .card').reverse().each($).wait(50, function(index) {
-                var card = $(this);
-        
-                animateMove(card, discarded, function() {
-                    refresh(response.state);
-
-                    animateDiscard(card);
-                });
-            });
-        }
-
-        clear(state.stacks[2].id, function(response) {
-            if (state.stacks[2].cards.length > 0) {
-                $('#you .card').reverse().each($).wait(50, function(index) {
+        if (response.success) {
+            if (state.stacks[1].cards.length > 0) {
+                $('#equipment .card').reverse().each($).wait(50, function(index) {
                     var card = $(this);
-        
+            
                     animateMove(card, discarded, function() {
                         refresh(response.state);
 
@@ -496,7 +502,23 @@ $('#strike-action').mouseup(function() {
                     });
                 });
             }
-        });
+
+            clear(state.stacks[2].id, function(response) {
+                if (response.success) {
+                    if (state.stacks[2].cards.length > 0) {
+                        $('#you .card').reverse().each($).wait(50, function(index) {
+                            var card = $(this);
+                
+                            animateMove(card, discarded, function() {
+                                refresh(response.state);
+
+                                animateDiscard(card);
+                            });
+                        });
+                    }
+                }
+            });
+        }
     });
 });
 
@@ -509,20 +531,22 @@ $('#forge-action').mouseup(function() {
 
     if (state.stacks[4].cards.length > 0) {
         clear(state.stacks[4].id, function(response) {
-            refresh(response.state);
+            if (response.success) {
+                refresh(response.state);
 
-            var new_card = state.stacks[1].cards[0];
+                var new_card = state.stacks[1].cards[0];
 
-            $('#forge .card').reverse().each($).wait(50, function(index) {
-                var card = $(this);
-                var discarded = $('#discarded');
+                $('#forge .card').reverse().each($).wait(50, function(index) {
+                    var card = $(this);
+                    var discarded = $('#discarded');
 
-                animateMove(card, discarded, function() {
-                    animateDiscard(card);
+                    animateMove(card, discarded, function() {
+                        animateDiscard(card);
+                    });
+                }).all().wait(500, function() {
+                    drawIntoEquipment(new_card, 100);
                 });
-            }).all().wait(500, function() {
-                drawIntoEquipment(new_card, 100);
-            });
+            }
         });
     }
 });
@@ -536,19 +560,21 @@ $('#treasure-action').mouseup(function() {
 
     if (state.stacks[3].cards.length > 0) {
         clear(state.stacks[3].id, function(response) {
-            refresh(response.state);
+            if (response.success) {
+                refresh(response.state);
 
-            $('#treasure .card').reverse().each($).wait(50, function(index) {
-                var card = $(this);
-                var strike_button = $('#strike-action');
-                var discarded = $('#discarded');
+                $('#treasure .card').reverse().each($).wait(50, function(index) {
+                    var card = $(this);
+                    var strike_button = $('#strike-action');
+                    var discarded = $('#discarded');
 
-                animateMove(card, strike_button, function() {
-                    animateMove(card, discarded, function() {
-                        animateDiscard(card);
+                    animateMove(card, strike_button, function() {
+                        animateMove(card, discarded, function() {
+                            animateDiscard(card);
+                        });
                     });
                 });
-            });
+            }
         });
     }
 });
