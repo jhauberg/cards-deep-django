@@ -356,3 +356,9 @@
 .stats {
     visibility: hidden;
 }
+
+#killer-label {
+    margin-top: 12px;
+    font-size: 1.0em;
+    text-align: center;
+}

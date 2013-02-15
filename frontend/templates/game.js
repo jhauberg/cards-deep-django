@@ -83,6 +83,14 @@ function fidget(element, range) {
 var state = {}
 
 function onStateChanged(previous_state) {
+    updateScore();
+    updateHealth();
+    updateHint();
+
+    determineStrikeAvailability();
+    determineForgeAvailability();
+    determineBuffAvailability();
+
     if (state.is_lost) {
         var strikeButton = $('#strike-action');
         var forgeButton = $('#forge-action');
@@ -99,15 +107,12 @@ function onStateChanged(previous_state) {
         if (!treasureButton.hasClass('disabled')) {
             treasureButton.addClass('disabled');
         }
+
+        $('.card').unbind('mouseup mouseenter mouseleave');
+        $('.health').css('opacity', 0.4);
+        
+        $('#you li').last().append('<div id="killer-label">Your killer!</div>');
     }
-
-    updateScore();
-    updateHealth();
-    updateHint();
-
-    determineStrikeAvailability();
-    determineForgeAvailability();
-    determineBuffAvailability();
 }
 
 function toggleButton(button, enabled) {
@@ -502,6 +507,9 @@ $('#strike-action').mouseup(function() {
                     });
                 });
             }
+
+            // todo: there is an issue here, because when player has lost, only the weapon stack will be cleared.
+            // no actions are allowed after losing, so the second stack can never be cleared.
 
             clear(state.stacks[2].id, function(response) {
                 if (response.success) {
