@@ -17,16 +17,8 @@
     margin-right: 8px;
 }
 
-.scoreboard {
-    float: right;
-    cursor: default;
-    position: relative;
-}
-
-.scoreboard-value {
-    font-weight: bold;
-    margin-right: 12px;
-    font-size: 3.5em;
+#menu-home {
+    margin-right: 16px;
 }
 
 /**
@@ -105,6 +97,18 @@
     font-family: 'Georgia';
     font-weight: bold;
     font-size: 32px;
+}
+
+.scoreboard {
+    float: right;
+    cursor: default;
+    position: relative;
+}
+
+.scoreboard-value {
+    font-weight: bold;
+    margin-right: 12px;
+    font-size: 3.5em;
 }
 
 .health {
@@ -190,6 +194,9 @@
 #room {
     clear: both;
     float: left;
+    /* to avoid glitchy repositioning of elements when skipping rooms */
+    width: 440px;
+    height: 106px; 
 }
 
 #room .card {
