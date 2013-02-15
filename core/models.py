@@ -148,7 +148,7 @@ class Stack(models.Model):
         return get_first_element(Card.objects.filter(stack=self).order_by('-order_in_stack')[:1])
 
     def get_all_cards(self):
-        return Card.objects.filter(stack=self)
+        return Card.objects.filter(stack=self).order_by('order_in_stack')
 
     def count(self):
         return len(self.get_all_cards())
