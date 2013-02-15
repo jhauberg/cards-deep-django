@@ -68,6 +68,9 @@ class Session(models.Model):
     score = models.IntegerField(default=0)
     score_multiplier = models.IntegerField(default=1)
 
+    def is_lost(self):
+        return self.health == 0
+
     def __unicode__(self):
         return u'%s with Health: %s' % (self.belongs_to_player, self.health)
 

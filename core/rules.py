@@ -54,7 +54,7 @@ def start(player):
     """
     Attempts creating a new game session for the given player.
     """
-    if player is None:
+    if not player:
         return None
 
     # Initialize all the stacks.
@@ -113,7 +113,7 @@ def draw_single(session, properties=None):
     Attempts drawing a single card.
     Can optionally be given specific properties, determined randomly otherwise.
     """
-    if session is None:
+    if not session:
         return None
 
     card_should_be_special = False
@@ -189,7 +189,7 @@ def draw(session, amount):
     """
     Attempts drawing a specific amount of cards.
     """
-    if session is None:
+    if not session:
         return None
 
     if amount <= 0:
@@ -210,7 +210,7 @@ def can_activate_stack(session, stack):
     """
     Determines whether a stack can be activated in its current state.
     """
-    if not session or not stack:
+    if not session or session.is_lost() or not stack:
         return False
 
     # Assuming an empty stack can never be activated.
@@ -250,7 +250,7 @@ def activate_stack(session, stack):
     """
     Attempts activating/clearing a stack.
     """
-    if not session or not stack:
+    if not session or session.is_lost() or not stack:
         return False
 
     if not can_activate_stack(session, stack):
@@ -317,7 +317,7 @@ def can_activate_card(session, card):
     """
     Determines whether a card has properties that allow it to be activated.
     """
-    if not session or not card:
+    if not session or session.is_lost() or not card:
         return False
 
     if card.details.kind is CARD_KIND_POTION:
@@ -338,7 +338,7 @@ def activate_card(session, card):
     Attempts activating a card.
     This usually occurs when a card has been successfully moved from the current room.
     """
-    if not session or not card:
+    if not session or session.is_lost() or not card:
         return False
 
     if not can_activate_card(session, card):
@@ -382,7 +382,7 @@ def activate_card(session, card):
                 try:
                     new_health = session.health - damage
 
-                    if new_health < 0:
+                    if new_health <= 0:
                         new_health = 0
 
                     session.health = new_health
@@ -404,7 +404,7 @@ def can_move(session, card, to_stack):
     """
     Determines whether a card can be moved to a given stack.
     """
-    if (not session or
+    if (not session or session.is_lost() or
         not card or
         not to_stack):
         return False
@@ -486,7 +486,7 @@ def move(session, card, to_stack):
     """
     Attempts moving a card into a given stack.
     """
-    if not session:
+    if not session or session.is_lost():
         return False
 
     if not card or not to_stack:
@@ -542,7 +542,7 @@ def discard(session, card):
     """
     Discards a card from a game session. The 10 most recently discarded cards are stored.
     """
-    if session is None:
+    if not session:
         return False
 
     logger.info('  trying to move %s to "discard_stack"' % (card))
@@ -565,7 +565,7 @@ def discard_many(session, cards):
     """
     Attempts discarding several cards at once.
     """
-    if session is None or cards is None:
+    if not session or not cards:
         return False
 
     amount_discarded = 0
@@ -587,7 +587,7 @@ def can_skip_on_next_move(session):
     """
     Determines whether a game can have its current room skipped on the following turn.
     """
-    if session is None:
+    if not session or session.is_lost():
         return False
 
     if (session.amount_of_cards_moved_since_last_skip == REQUIRED_TURNS_BEFORE_SKIPPING - 1):
@@ -600,7 +600,7 @@ def can_skip(session):
     """
     Determines whether a game can have its current room skipped or not.
     """
-    if session is None:
+    if not session or session.is_lost():
         return False
 
     if (session.amount_of_cards_moved_since_last_skip == -1 or
@@ -614,7 +614,7 @@ def skip(session):
     """
     Attempts skipping the current room.
     """
-    if session is None:
+    if not session or session.is_lost():
         return False
 
     if can_skip(session):
