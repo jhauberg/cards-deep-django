@@ -61,13 +61,13 @@ def current_state(session):
     if not session:
         return None
 
-    current_room_cards = list(session.room_stack.get_all_cards())
-    current_equipment_cards = list(session.equipment_stack.get_all_cards())
-    current_you_cards = list(session.you_stack.get_all_cards())
-    current_treasure_cards = list(session.treasure_stack.get_all_cards())
-    current_forge_cards = list(session.forge_stack.get_all_cards())
+    current_room_cards = list(session.room_stack.all_cards())
+    current_equipment_cards = list(session.equipment_stack.all_cards())
+    current_you_cards = list(session.you_stack.all_cards())
+    current_treasure_cards = list(session.treasure_stack.all_cards())
+    current_forge_cards = list(session.forge_stack.all_cards())
 
-    currently_discarded_cards = list(session.discard_stack.get_all_cards())
+    currently_discarded_cards = list(session.discard_stack.all_cards())
 
     return {
         'session_id': session.id,

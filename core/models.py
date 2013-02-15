@@ -141,22 +141,25 @@ class Stack(models.Model):
 
         return False
 
-    def get_bottom(self):
+    def bottom(self):
         return get_first_element(Card.objects.filter(stack=self).order_by('order_in_stack')[:1])
 
-    def get_top(self):
+    def top(self):
         return get_first_element(Card.objects.filter(stack=self).order_by('-order_in_stack')[:1])
 
-    def get_all_cards(self):
+    def all_cards(self):
         return Card.objects.filter(stack=self).order_by('order_in_stack')
 
     def count(self):
-        return len(self.get_all_cards())
+        return len(self.all_cards())
 
     def is_empty(self):
         return self.count() == 0
 
     def push(self, card):
+        if card.stack == self:
+            return False
+
         try:
             card.stack = self
             card.order_in_stack = self.count()
@@ -176,7 +179,7 @@ class Stack(models.Model):
         return stacked_cards
 
     def pop_specific(self, card):
-        cards = self.get_all_cards()
+        cards = self.all_cards()
 
         if card in cards:
             try:
@@ -192,7 +195,7 @@ class Stack(models.Model):
 
     def pop(self):
         try:
-            self.pop_specific(self.get_top())
+            self.pop_specific(self.top())
         except:
             return False
 

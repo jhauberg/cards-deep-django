@@ -218,7 +218,7 @@ def can_activate_stack(session, stack):
         pass
 
     if stack == session.forge_stack:
-        all_forgeable_cards = stack.get_all_cards()
+        all_forgeable_cards = stack.all_cards()
 
         if all_forgeable_cards:
             amount_of_forgeable_cards = len(all_forgeable_cards)
@@ -245,9 +245,9 @@ def activate_stack(session, stack):
         return False
 
     if stack == session.equipment_stack or stack == session.you_stack:
-        discard_many(session, session.equipment_stack.get_all_cards())
+        discard_many(session, session.equipment_stack.all_cards())
 
-        monster_cards = session.you_stack.get_all_cards()
+        monster_cards = session.you_stack.all_cards()
         monster_cards_discarded = discard_many(session, monster_cards)
 
         score = monster_cards_discarded * monster_cards_discarded * session.score_multiplier
@@ -258,7 +258,7 @@ def activate_stack(session, stack):
 
     if stack == session.treasure_stack:
         # apply multiplier to strike (i.e. score = (monsters * monsters) * treasures)
-        treasure_cards = session.treasure_stack.get_all_cards()
+        treasure_cards = session.treasure_stack.all_cards()
         treasure_cards_discarded = discard_many(session, treasure_cards)
 
         score_multiplier = treasure_cards_discarded
@@ -272,7 +272,7 @@ def activate_stack(session, stack):
         # Draw a new weapon card that is valued depending on how many cards were spent.
 
         # Attempt discarding all cards that were spent creating a weapon.
-        value = discard_many(session, session.forge_stack.get_all_cards())
+        value = discard_many(session, session.forge_stack.all_cards())
 
         if value <= 0:
             return False
@@ -349,7 +349,7 @@ def activate_card(session, card):
         discard(session, card)
 
     if card.details.kind is CARD_KIND_MONSTER:
-        most_recently_played_weapon_card = session.equipment_stack.get_top()
+        most_recently_played_weapon_card = session.equipment_stack.top()
 
         if most_recently_played_weapon_card and most_recently_played_weapon_card.is_special:
             try:
@@ -407,7 +407,7 @@ def can_move(session, card, to_stack):
             logger.error(' * only treasure cards can be moved here!')
             return False
 
-        if len(session.treasure_stack.get_all_cards()) >= TREASURE_CAPACITY:
+        if len(session.treasure_stack.all_cards()) >= TREASURE_CAPACITY:
             # Treasure stack already holds maximum amount of treasure
             logger.error(' * max treasure reached!')
             return False
@@ -418,7 +418,7 @@ def can_move(session, card, to_stack):
             logger.error(' * only scrap cards can be moved here!')
             return False
 
-        if len(session.forge_stack.get_all_cards()) >= FORGE_CAPACITY:
+        if len(session.forge_stack.all_cards()) >= FORGE_CAPACITY:
             # Forge stack already holds maximum amount of scraps
             logger.error(' * max scraps reached!')
             return False
@@ -429,7 +429,7 @@ def can_move(session, card, to_stack):
             logger.error(' * only weapon cards can be moved here!')
             return False
 
-        most_recently_played_weapon_card = session.equipment_stack.get_top()
+        most_recently_played_weapon_card = session.equipment_stack.top()
 
         if most_recently_played_weapon_card is not None:
             if not card.is_special:
@@ -445,11 +445,11 @@ def can_move(session, card, to_stack):
 
         if card.details.kind is CARD_KIND_MONSTER:
             # Card is a monster
-            most_recently_played_monster_card = session.you_stack.get_top()
+            most_recently_played_monster_card = session.you_stack.top()
 
             if most_recently_played_monster_card is not None:
                 if most_recently_played_monster_card.details.value <= card.details.value:
-                    most_recently_played_weapon_card = session.equipment_stack.get_top()
+                    most_recently_played_weapon_card = session.equipment_stack.top()
 
                     if most_recently_played_weapon_card and most_recently_played_weapon_card.is_special:
                         # Basically, you can only place monsters of higher value on other monsters if
@@ -524,7 +524,7 @@ def discard(session, card):
         logger.info('    success!')
 
         if session.discard_stack.count() > DISCARD_CAPACITY:
-            oldest_discarded_card = session.discard_stack.get_bottom()
+            oldest_discarded_card = session.discard_stack.bottom()
 
             if not session.discard_stack.pop_specific(oldest_discarded_card):
                 return False
@@ -591,7 +591,7 @@ def skip(session):
         return False
 
     if can_skip(session):
-        room_cards = session.room_stack.get_all_cards()
+        room_cards = session.room_stack.all_cards()
 
         logger.info('skipping %d cards...' % (len(room_cards)))
 
