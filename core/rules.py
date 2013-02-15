@@ -256,7 +256,7 @@ def activate_stack(session, stack):
     if not can_activate_stack(session, stack):
         return False
 
-    if stack == session.equipment_stack or stack == session.you_stack:
+    if stack == session.equipment_stack:
         discard_many(session, session.equipment_stack.all_cards())
 
         monster_cards = session.you_stack.all_cards()

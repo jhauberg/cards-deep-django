@@ -338,7 +338,9 @@ function bindCardActions(selector) {
                         animateMove(card, move_to_stack, function() {
                             refresh(response.state);
 
-                            drawTopIntoRoom();
+                            if (!state.is_lost) {
+                                drawTopIntoRoom();
+                            }
 
                             if (shouldBeDiscardedImmediately) {
                                 var discarded = $('#discarded');
@@ -508,24 +510,15 @@ $('#strike-action').mouseup(function() {
                 });
             }
 
-            // todo: there is an issue here, because when player has lost, only the weapon stack will be cleared.
-            // no actions are allowed after losing, so the second stack can never be cleared.
-
-            clear(state.stacks[2].id, function(response) {
-                if (response.success) {
-                    if (state.stacks[2].cards.length > 0) {
-                        $('#you .card').reverse().each($).wait(50, function(index) {
-                            var card = $(this);
-                
-                            animateMove(card, discarded, function() {
-                                refresh(response.state);
-
-                                animateDiscard(card);
-                            });
-                        });
-                    }
-                }
-            });
+            if (state.stacks[2].cards.length > 0) {
+                $('#you .card').reverse().each($).wait(50, function(index) {
+                    var card = $(this);
+        
+                    animateMove(card, discarded, function() {
+                        animateDiscard(card);
+                    });
+                });
+            }
         }
     });
 });
