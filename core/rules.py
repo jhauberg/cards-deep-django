@@ -264,8 +264,6 @@ def activate_stack(session, stack):
 
         score = (monster_cards_discarded * monster_cards_discarded)
 
-        logger.info('  score = %d' % (score))
-
         if session.score_multiplier > 0:
             score_percentage_multiplier = float(session.score_multiplier) / TREASURE_CAPACITY
             score_bonus = score * (1 + score_percentage_multiplier)
