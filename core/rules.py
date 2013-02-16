@@ -176,11 +176,14 @@ def draw_single(session, properties=None):
         )
 
         card.save()
+    except:
+        return None
 
+    try:
         session.belongs_to_player.statistics.cards_drawn += 1
         session.belongs_to_player.statistics.save()
     except:
-        return None
+        pass
 
     return card
 
@@ -529,10 +532,15 @@ def move(session, card, to_stack):
 
         try:
             new_card = draw_single(session)
+        except:
+            logger.error(' * could not draw new card to the room!')
 
+            return False
+
+        try:
             session.room_stack.push(new_card)
         except:
-            logger.error(' * could not draw and push new card to room!')
+            logger.error(' * could not push new card to the room!')
 
             return False
 
