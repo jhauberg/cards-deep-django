@@ -135,7 +135,7 @@ function determineStrikeAvailability() {
     $('#strike-action').html(
         'STRIKE<br>' + 
         (strike_amount > 0 ? strike_amount : '') +
-        (strike_amount > 1 ? '<div id="strike-action-multiplier">* 100%</div>' : '') +
+        (strike_amount > 1 ? '<div id="strike-action-multiplier">X ' + strike_amount + '</div>' : '') +
         (state.score_multiplier > 0 ? '<div id="strike-action-bonus-multiplier">+ ' + (state.score_multiplier * 10 + 100) + '%</div>' : ''));
 }
 
@@ -162,7 +162,7 @@ function updateHealth(previousHealth) {
     var amount_in_pixels = new_health_amount * 6;
 
     $('.health-bar').css("width", amount_in_pixels);
-    $('.health-ui .value').text(new_health_amount);
+    $('.health-ui .value').first().text(new_health_amount);
 
     if (!isNaN(health_delta) && health_delta != 0) {
         floatDamageNumbers(health_delta);
@@ -172,7 +172,7 @@ function updateHealth(previousHealth) {
 function updateScore(previousScore) {
     var scoreDelta = state.score - previousScore;
 
-    $('.scoreboard .scoreboard-value').text('' + state.score);
+    $('.scoreboard .scoreboard-value').first().text('' + state.score);
 
     if (!isNaN(scoreDelta) && scoreDelta != 0) {
         floatScoreNumbers(scoreDelta);
@@ -632,25 +632,27 @@ $('#menu-next').mouseup(function() {
 });
 
 function floatDamageNumbers(damage) {
+    $('#health-floating-text').remove();
+
     $('.health-ui').append('<div class="value negative" id="health-floating-text">' + (damage > 0 ? '+' : '') + damage + '</div>');
 
     $('#health-floating-text').animate({
         top: -80,
         opacity: 0
-    }, 3000, function() {
+    }, 4000, function() {
         $(this).remove();
     });
 }
 
 function floatScoreNumbers(score) {
+    $('#score-floating-text').remove();
+
     $('.scoreboard').append('<div class="scoreboard-value negative" id="score-floating-text">' + (score > 0 ? '+' : '') + score + '</div>');
 
     $('#score-floating-text').animate({
         top: -120,
         opacity: 0
-    }, 3000, function() {
+    }, 4000, function() {
         $(this).remove();
     });
 }
-
-
