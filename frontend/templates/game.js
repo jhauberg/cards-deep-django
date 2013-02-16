@@ -82,9 +82,9 @@ function fidget(element, range) {
 
 var state = {}
 
-function onStateChanged(previous_state) {
-    updateScore();
-    updateHealth();
+function onStateChanged(previousState) {
+    updateScore(previousState.score);
+    updateHealth(previousState.health);
     updateHint();
 
     determineStrikeAvailability();
@@ -156,16 +156,27 @@ function determineBuffAvailability() {
         (state.stacks[3].cards.length > 0 ? '' + state.stacks[3].cards.length : ''));
 }
 
-function updateHealth() {
+function updateHealth(previousHealth) {
     var new_health_amount = state.health;
+    var health_delta = new_health_amount - previousHealth;
     var amount_in_pixels = new_health_amount * 6;
 
     $('.health-bar').css("width", amount_in_pixels);
     $('.health-ui .value').text(new_health_amount);
+
+    if (!isNaN(health_delta) && health_delta != 0) {
+        floatDamageNumbers(health_delta);
+    }
 }
 
-function updateScore() {
+function updateScore(previousScore) {
+    var scoreDelta = state.score - previousScore;
+
     $('.scoreboard .scoreboard-value').text('' + state.score);
+
+    if (!isNaN(scoreDelta) && scoreDelta != 0) {
+        floatScoreNumbers(scoreDelta);
+    }
 }
 
 var didShowHintLastMove = false;
@@ -619,3 +630,27 @@ $('#menu-next').mouseup(function() {
         }
     );
 });
+
+function floatDamageNumbers(damage) {
+    $('.health-ui').append('<div class="value negative" id="health-floating-text">' + (damage > 0 ? '+' : '') + damage + '</div>');
+
+    $('#health-floating-text').animate({
+        top: -80,
+        opacity: 0
+    }, 3000, function() {
+        $(this).remove();
+    });
+}
+
+function floatScoreNumbers(score) {
+    $('.scoreboard').append('<div class="scoreboard-value negative" id="score-floating-text">' + (score > 0 ? '+' : '') + score + '</div>');
+
+    $('#score-floating-text').animate({
+        top: -120,
+        opacity: 0
+    }, 3000, function() {
+        $(this).remove();
+    });
+}
+
+

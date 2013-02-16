@@ -96,15 +96,25 @@
 }
 
 .scoreboard {
-    float: right;
+    margin-left: 75%;
     cursor: default;
     position: relative;
 }
 
 .scoreboard-value {
+    top: 0px;
+    left: 0px;
+    position: absolute;
     font-weight: bold;
-    margin-right: 12px;
     font-size: 3.5em;
+}
+
+.scoreboard .negative {
+    color: black;
+}
+
+.scoreboard .positive {
+    color: black;
 }
 
 .health {
@@ -135,6 +145,14 @@
     font-family: 'Georgia';
     font-weight: bold;
     font-size: 18px;
+}
+
+.health-ui .negative {
+    color: black;
+}
+
+.health-ui .positive {
+    color: black;
 }
 
 .health-bar-frame {
