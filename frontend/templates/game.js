@@ -135,7 +135,8 @@ function determineStrikeAvailability() {
     $('#strike-action').html(
         'STRIKE<br>' + 
         (strike_amount > 0 ? strike_amount : '') +
-        (state.score_multiplier > 1 ? ' * ' + state.score_multiplier : ''));
+        (strike_amount > 1 ? '<div id="strike-action-multiplier">* 100%</div>' : '') +
+        (state.score_multiplier > 0 ? '<div id="strike-action-bonus-multiplier">+ ' + (state.score_multiplier * 10 + 100) + '%</div>' : ''));
 }
 
 function determineForgeAvailability() {

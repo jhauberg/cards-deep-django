@@ -262,23 +262,26 @@ def activate_stack(session, stack):
         monster_cards = session.you_stack.all_cards()
         monster_cards_discarded = discard_many(session, monster_cards)
 
-        score = monster_cards_discarded * monster_cards_discarded * session.score_multiplier
+        score = (monster_cards_discarded * monster_cards_discarded)
+
+        logger.info('  score = %d' % (score))
+
+        if session.score_multiplier > 0:
+            score_percentage_multiplier = float(session.score_multiplier) / TREASURE_CAPACITY
+            score_bonus = score * (1 + score_percentage_multiplier)
+
+            score += score_bonus
 
         session.score += score
-        session.score_multiplier = 1
+        session.score_multiplier = 0
         session.save()
 
     if stack == session.treasure_stack:
-        # apply multiplier to strike (i.e. score = (monsters * monsters) * treasures)
         treasure_cards = session.treasure_stack.all_cards()
         treasure_cards_discarded = discard_many(session, treasure_cards)
 
-        score_multiplier = treasure_cards_discarded
-
-        session.score_multiplier += score_multiplier
+        session.score_multiplier = treasure_cards_discarded
         session.save()
-
-        pass
 
     if stack == session.forge_stack:
         # Draw a new weapon card that is valued depending on how many cards were spent.

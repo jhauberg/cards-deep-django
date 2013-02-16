@@ -66,7 +66,7 @@ class Session(models.Model):
     discard_stack = models.ForeignKey('Stack', related_name='discard_stack')
 
     score = models.IntegerField(default=0)
-    score_multiplier = models.IntegerField(default=1)
+    score_multiplier = models.IntegerField(default=0)
 
     def is_lost(self):
         return self.health == 0

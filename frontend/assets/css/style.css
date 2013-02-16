@@ -294,6 +294,17 @@
     left: 22px;
 }
 
+#strike-action-multiplier {
+    text-align: center;
+    margin-top: 18px;
+    color: black;
+}
+
+#strike-action-bonus-multiplier {
+    text-align: center;
+    color: black;
+}
+
 #forge-action {
     clear: both;
     float: left;
