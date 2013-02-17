@@ -159,6 +159,8 @@
 
             <script type="text/javascript">
             
+                {% include 'api.js' with state=state %}
+                {% include 'util.js' with state=state %}
                 {% include 'game.js' with state=state %}
 
             </script>

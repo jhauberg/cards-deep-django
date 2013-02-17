@@ -1,86 +1,23 @@
-//////////////
-// game rules
-
-function move(card, stack, completed) {
-    $.post("{% url perform_action state.session_id 'move' %}", 
-        { 
-            'csrfmiddlewaretoken': '{{ csrf_token }}',
-            'card_id': card,
-            'to_stack_id': stack
-        },
-        completed,
-        'json'
-    );
-}
-
-function skip(completed) {
-    $.post("{% url perform_action state.session_id 'skip' %}", 
-        { 
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
-        },
-        completed,
-        'json'
-    );
-}
-
-function clear(stack, completed) {
-    $.post("{% url perform_action state.session_id 'clear' %}", 
-        { 
-            'csrfmiddlewaretoken': '{{ csrf_token }}',
-            'stack_id': stack
-        },
-        completed,
-        'json'
-    );
-}
-
-////////
-// util
-
-function getRandomBoolean() {
-    return Math.random() > 0.5;
-}
-
-function getRandomIntInRange(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function rotate(object, degrees) {
-    object.css({
-  '-webkit-transform' : 'rotate('+degrees+'deg)',
-     '-moz-transform' : 'rotate('+degrees+'deg)',  
-      '-ms-transform' : 'rotate('+degrees+'deg)',  
-       '-o-transform' : 'rotate('+degrees+'deg)',  
-          'transform' : 'rotate('+degrees+'deg)',  
-               'zoom' : 1
-
-    });
-}
-
-function translate(object, offset) {
-    object.css({
-        'margin-left': offset.x,
-        'margin-top': offset.y
-    });
-}
-
-function fidget(element, range) {
-    var variation = getRandomIntInRange(-range, range);
-    var rotation = getRandomBoolean() ? variation : -variation;
-
-    var offset = { 
-        x: variation / 2, 
-        y: variation 
-    };
-
-    rotate(element, rotation);
-    translate(element, offset);
-}
-
-////////////////////
-// game interaction
+var FIDGET_AMOUNT_DISCARD = 12;
+var FIDGET_AMOUNT = 6;
 
 var state = {}
+
+var didShowHintLastMove = false;
+
+function refresh(newState) {
+    var previousState = state;
+
+    if (newState) {
+        state = newState;
+
+        onStateChanged(previousState);
+    } else {
+        getState(function(response) {
+            refresh(response);
+        });
+    }
+}
 
 function onStateChanged(previousState) {
     updateScore(previousState.score);
@@ -92,34 +29,14 @@ function onStateChanged(previousState) {
     determineBuffAvailability();
 
     if (state.is_lost) {
-        var strikeButton = $('#strike-action');
-        var forgeButton = $('#forge-action');
-        var treasureButton = $('#treasure-action');
-
-        if (!strikeButton.hasClass('disabled')) {
-            strikeButton.addClass('disabled');
-        }
-
-        if (!forgeButton.hasClass('disabled')) {
-            forgeButton.addClass('disabled');
-        }
-
-        if (!treasureButton.hasClass('disabled')) {
-            treasureButton.addClass('disabled');
-        }
+        toggleButton($('#strike-action'), false);
+        toggleButton($('#forge-action'), false);
+        toggleButton($('#treasure-action'), false);
 
         $('.card').unbind('mouseup mouseenter mouseleave');
         $('.health').css('opacity', 0.4);
 
         $('#you li').last().append('<div id="killer-label">Your killer!</div>');
-    }
-}
-
-function toggleButton(button, enabled) {
-    if (enabled) {
-        button.removeClass('disabled');
-    } else {
-        button.addClass('disabled');
     }
 }
 
@@ -157,15 +74,14 @@ function determineBuffAvailability() {
 }
 
 function updateHealth(previousHealth) {
-    var new_health_amount = state.health;
-    var health_delta = new_health_amount - previousHealth;
-    var amount_in_pixels = new_health_amount * 6;
+    var healthDelta = state.health - previousHealth;
+    var amountInPixels = state.health * 6;
 
-    $('.health-bar').css("width", amount_in_pixels);
-    $('.health-ui .value').first().text(new_health_amount);
+    $('.health-bar').css("width", amountInPixels);
+    $('.health-ui .value').first().text(state.health);
 
-    if (!isNaN(health_delta) && health_delta != 0) {
-        floatDamageNumbers(health_delta);
+    if (!isNaN(healthDelta) && healthDelta != 0) {
+        floatDamageNumbers(healthDelta);
     }
 }
 
@@ -178,8 +94,6 @@ function updateScore(previousScore) {
         floatScoreNumbers(scoreDelta);
     }
 }
-
-var didShowHintLastMove = false;
 
 function updateHint() {
     var hint = $('#hint-skip');
@@ -211,26 +125,6 @@ function updateHint() {
     }
 }
 
-function refresh(newState) {
-    var previous_state = state;
-
-    if (newState) {
-        state = newState;
-
-        onStateChanged(previous_state);
-    } else {
-        $.get("{% url state state.session_id %}", 
-            { },
-            function(response) {
-                state = response;
-
-                onStateChanged(previous_state);
-            },
-            'json'
-        );
-    }
-}
-
 function selectCardInRoom(element, selected) {
     var amount = selected ? '12px' : '0px';
 
@@ -248,128 +142,6 @@ function selectMap(selected) {
         }, 'fast'
     );
 }
-
-function animateDiscard(card) {
-    var discarded = $('#discarded');
-
-    card.animate({
-        opacity: 0
-    }, 300, function() {
-        card.removeAttr('style');
-        card.removeClass('monster treasure scrap potion weapon');
-        card.empty();
-
-        discarded.append(this);
-
-        fidget(card, FIDGET_AMOUNT_DISCARD);
-
-        card.animate({
-            opacity: 1
-        }, 100);
-    });
-}
-
-function animateMove(card, stack, completed) {
-    var stack_offset = stack.offset();
-    var card_offset = card.offset();
-
-    var dx = stack_offset.left - card_offset.left;
-    var dy = stack_offset.top - card_offset.top;
-
-    card.unbind('mouseup mouseenter mouseleave');
-
-    card.animate({
-        top: dy <= 0 ? 40 : -40
-    }, 200, function() {
-        card.animate({
-            top: dy,
-            left: dx
-        }, 500, function() {
-            card.removeAttr('style');
-
-            stack.append(this);
-
-            fidget(card, FIDGET_AMOUNT);
-
-            if (completed) {
-                completed();
-            }
-        });
-    });
-}
-
-/////////
-// hooks
-
-var FIDGET_AMOUNT_DISCARD = 12;
-var FIDGET_AMOUNT = 6;
-
-function bindCardActions(selector) {
-    $(selector).mouseenter(
-        function() {
-            selectCardInRoom($(this), true);
-        }
-    );
-
-    $(selector).mouseleave(
-        function() {
-            selectCardInRoom($(this), false);
-        }
-    );
-
-    $(selector).mouseup(
-        function() {
-            var card = $(this);
-            var card_id = this.id.replace('card-', '');
-
-            var move_to_stack_id = -1;
-            var move_to_stack = null;
-
-            if (card.hasClass('weapon')) {
-                move_to_stack_id = state.stacks[1].id;
-                move_to_stack = $('#equipment');
-            } else if (card.hasClass('monster') || card.hasClass('potion')) {
-                move_to_stack_id = state.stacks[2].id;
-                move_to_stack = $('#you');
-            } else if (card.hasClass('treasure')) {
-                move_to_stack_id = state.stacks[3].id;
-                move_to_stack = $('#treasure');
-            } else if (card.hasClass('scrap')) {
-                move_to_stack_id = state.stacks[4].id;
-                move_to_stack = $('#forge');
-            }
-
-            if ((card != null && card_id != -1) && 
-                (move_to_stack != null && move_to_stack_id != -1)) {
-                move(card_id, move_to_stack_id, function(response) {
-                    if (response.success) {
-                        var shouldBeDiscardedImmediately = 
-                            (card.hasClass('monster') && state.stacks[1].cards.length == 0) ||
-                            (card.hasClass('potion'));
-
-                        animateMove(card, move_to_stack, function() {
-                            refresh(response.state);
-
-                            if (!state.is_lost) {
-                                drawTopIntoRoom();
-                            }
-
-                            if (shouldBeDiscardedImmediately) {
-                                var discarded = $('#discarded');
-
-                                animateMove(card, discarded, function() {
-                                    animateDiscard(card);
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        }
-    );
-}
-
-bindCardActions('#room .card');
 
 function drawIntoRoom(card, delay) {
     $.get('{% url card state.session_id %}?id=' + card.id, function(data) {
@@ -419,6 +191,149 @@ function drawAllIntoRoom() {
     }
 }
 
+function animateDiscard(card) {
+    var discarded = $('#discarded');
+
+    card.animate({
+        opacity: 0
+    }, 300, function() {
+        card.removeAttr('style');
+        card.removeClass('monster treasure scrap potion weapon');
+        card.empty();
+
+        discarded.append(this);
+
+        fidget(card, FIDGET_AMOUNT_DISCARD);
+
+        card.animate({
+            opacity: 1
+        }, 100);
+    });
+}
+
+function animateMove(card, stack, completed) {
+    var stackOffset = stack.offset();
+    var cardOffset = card.offset();
+
+    var dx = stackOffset.left - cardOffset.left;
+    var dy = stackOffset.top - cardOffset.top;
+
+    card.unbind('mouseup mouseenter mouseleave');
+
+    card.animate({
+        top: dy <= 0 ? 40 : -40
+    }, 200, function() {
+        card.animate({
+            top: dy,
+            left: dx
+        }, 500, function() {
+            card.removeAttr('style');
+
+            stack.append(this);
+
+            fidget(card, FIDGET_AMOUNT);
+
+            if (completed) {
+                completed();
+            }
+        });
+    });
+}
+
+function floatNumbers(numbersElement, inSelector) {
+    $(inSelector).append(numbersElement);
+
+    $(numbersElement).animate({
+        top: -100,
+        opacity: 0
+    }, 4000, function() {
+        $(this).remove();
+    });
+}
+
+function floatDamageNumbers(damage) {
+    var $floater = $(
+        '<div class="value negative">' + 
+        (damage > 0 ? '+' : '') + damage + 
+        '</div>');
+
+    floatNumbers($floater, '.health-ui', damage);
+}
+
+function floatScoreNumbers(score) {
+    var $floater = $(
+        '<div class="scoreboard-value negative">' + 
+        (score > 0 ? '+' : '') + score + 
+        '</div>');
+
+    floatNumbers($floater, '.scoreboard', score);
+}
+
+function bindCardActions(selector) {
+    $(selector).mouseenter(
+        function() {
+            selectCardInRoom($(this), true);
+        }
+    );
+
+    $(selector).mouseleave(
+        function() {
+            selectCardInRoom($(this), false);
+        }
+    );
+
+    $(selector).mouseup(
+        function() {
+            var card = $(this);
+            var cardId = this.id.replace('card-', '');
+
+            var moveToStackId = -1;
+            var moveToStack = null;
+
+            if (card.hasClass('weapon')) {
+                moveToStackId = state.stacks[1].id;
+                moveToStack = $('#equipment');
+            } else if (card.hasClass('monster') || card.hasClass('potion')) {
+                moveToStackId = state.stacks[2].id;
+                moveToStack = $('#you');
+            } else if (card.hasClass('treasure')) {
+                moveToStackId = state.stacks[3].id;
+                moveToStack = $('#treasure');
+            } else if (card.hasClass('scrap')) {
+                moveToStackId = state.stacks[4].id;
+                moveToStack = $('#forge');
+            }
+
+            if ((card != null && cardId != -1) && 
+                (moveToStack != null && moveToStackId != -1)) {
+                move(cardId, moveToStackId, function(response) {
+                    if (response.success) {
+                        var shouldBeDiscardedImmediately = 
+                            (card.hasClass('monster') && state.stacks[1].cards.length == 0) ||
+                            (card.hasClass('potion'));
+
+                        animateMove(card, moveToStack, function() {
+                            refresh(response.state);
+
+                            if (!state.is_lost) {
+                                drawTopIntoRoom();
+                            }
+
+                            if (shouldBeDiscardedImmediately) {
+                                var discarded = $('#discarded');
+
+                                animateMove(card, discarded, function() {
+                                    animateDiscard(card);
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        }
+    );
+}
+
 $("#map").mouseenter(
     function() {
         if (state.can_skip) {
@@ -434,8 +349,6 @@ $("#map").mouseleave(
         }
     }
 );
-
-jQuery.fn.reverse = [].reverse;
 
 $("#map").click(
     function() {
@@ -461,8 +374,6 @@ $("#map").click(
         }
     }
 );
-
-refresh();
 
 // fidget with the cards so the stacks looks messy initially
 $('#discarded .card').each(function(index) {
@@ -592,14 +503,6 @@ $('#treasure-action').mouseup(function() {
     }
 });
 
-function toggleVisibility(element) {
-    if (element.css('visibility') == 'hidden') {
-        element.css('visibility', 'visible');
-    } else {
-        element.css('visibility', 'hidden');
-    }
-}
-
 $('#menu-help').mouseup(function() {
     var manual = $('.manual');
     var stats = $('.stats');
@@ -631,28 +534,6 @@ $('#menu-next').mouseup(function() {
     );
 });
 
-function floatDamageNumbers(damage) {
-    $('#health-floating-text').remove();
+bindCardActions('#room .card');
 
-    $('.health-ui').append('<div class="value negative" id="health-floating-text">' + (damage > 0 ? '+' : '') + damage + '</div>');
-
-    $('#health-floating-text').animate({
-        top: -80,
-        opacity: 0
-    }, 4000, function() {
-        $(this).remove();
-    });
-}
-
-function floatScoreNumbers(score) {
-    $('#score-floating-text').remove();
-
-    $('.scoreboard').append('<div class="scoreboard-value negative" id="score-floating-text">' + (score > 0 ? '+' : '') + score + '</div>');
-
-    $('#score-floating-text').animate({
-        top: -120,
-        opacity: 0
-    }, 4000, function() {
-        $(this).remove();
-    });
-}
+refresh();
