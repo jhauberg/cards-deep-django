@@ -194,6 +194,10 @@ function drawAllIntoRoom() {
 function animateDiscard(card) {
     var discarded = $('#discarded');
 
+    if (discarded.children().length > 10) {
+        discarded.children().first().remove();
+    }
+
     card.animate({
         opacity: 0
     }, 300, function() {
