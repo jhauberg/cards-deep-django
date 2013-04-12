@@ -6,6 +6,8 @@ It currently looks like this:
 
 <img src="https://raw.github.com/shrt/cards-deep-django/master/screenshot.png" width="600" height="465">
 
+[See it in action here](http://youtu.be/AjDEW3Q85PI)
+
 Card iconography comes straight off the fantastic [Game Icons](http://game-icons.net/) resource. Thank you!
 
 ## How to
