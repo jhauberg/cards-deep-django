@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url
 
-urlpatterns = patterns('frontend.views',
+urlpatterns = patterns(
+    'frontend.views',
     url(r'^$', 'index', name='index'),
     url(r'^register/$', 'register', name='register'),
     url(r'^login/$', 'login', name='login'),
@@ -13,7 +14,8 @@ urlpatterns = patterns('frontend.views',
     url(r'^profile/(?P<player_id>\d+)/$', 'profile', name='profile'),
 )
 
-urlpatterns += patterns('core.views',
+urlpatterns += patterns(
+    'core.views',
     url(r'^play/(?P<session_id>\d+)/state/$', view='state', name='state'),
     url(r'^play/(?P<session_id>\d+)/action/(?P<action_type>\w+)/$', view='perform_action', name='perform_action'),
 )

@@ -1,5 +1,5 @@
 function getState(completed) {
-    $.get("{% url state state.session_id %}", 
+    $.get("{% url state state.session_id %}",
         { },
         completed,
         'json'
@@ -7,8 +7,8 @@ function getState(completed) {
 }
 
 function move(card, stack, completed) {
-    $.post("{% url perform_action state.session_id 'move' %}", 
-        { 
+    $.post("{% url perform_action state.session_id 'move' %}",
+        {
             'csrfmiddlewaretoken': '{{ csrf_token }}',
             'card_id': card,
             'to_stack_id': stack
@@ -19,8 +19,8 @@ function move(card, stack, completed) {
 }
 
 function skip(completed) {
-    $.post("{% url perform_action state.session_id 'skip' %}", 
-        { 
+    $.post("{% url perform_action state.session_id 'skip' %}",
+        {
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         completed,
@@ -29,8 +29,8 @@ function skip(completed) {
 }
 
 function clear(stack, completed) {
-    $.post("{% url perform_action state.session_id 'clear' %}", 
-        { 
+    $.post("{% url perform_action state.session_id 'clear' %}",
+        {
             'csrfmiddlewaretoken': '{{ csrf_token }}',
             'stack_id': stack
         },

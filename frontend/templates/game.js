@@ -1,7 +1,7 @@
 var FIDGET_AMOUNT_DISCARD = 12;
 var FIDGET_AMOUNT = 6;
 
-var state = {}
+var state = {};
 
 var didShowHintLastMove = false;
 
@@ -33,6 +33,7 @@ function onStateChanged(previousState) {
         toggleButton($('#forge-action'), false);
         toggleButton($('#treasure-action'), false);
 
+        // cards can not be activated in this state
         $('.card').unbind('mouseup mouseenter mouseleave');
         $('.health').css('opacity', 0.4);
 
@@ -41,35 +42,35 @@ function onStateChanged(previousState) {
 }
 
 function determineStrikeAvailability() {
-    toggleButton($('#strike-action'), 
+    toggleButton($('#strike-action'),
         state.stacks[1].cards.length > 0);
 
-    var strike_amount = 
-        state.stacks[1].cards.length > 0 && 
-        state.stacks[2].cards.length > 0 ? 
+    var strike_amount =
+        state.stacks[1].cards.length > 0 &&
+        state.stacks[2].cards.length > 0 ?
             state.stacks[2].cards.length : 0;
 
     $('#strike-action').html(
-        'STRIKE<br>' + 
+        'STRIKE<br>' +
         (strike_amount > 0 ? strike_amount : '') +
         (strike_amount > 1 ? '<div id="strike-action-multiplier">X ' + strike_amount + '</div>' : '') +
         (state.score_multiplier > 0 ? '<div id="strike-action-bonus-multiplier">+ ' + (state.score_multiplier * 10 + 100) + '%</div>' : ''));
 }
 
 function determineForgeAvailability() {
-    toggleButton($('#forge-action'), 
+    toggleButton($('#forge-action'),
         state.stacks[4].cards.length >= 2 &&
-        state.stacks[1].cards.length == 0);
+        state.stacks[1].cards.length === 0);
 
-    $('#forge-action').html('FORGE<br>' + 
+    $('#forge-action').html('FORGE<br>' +
         (state.stacks[4].cards.length > 0 ? '' + state.stacks[4].cards.length : ''));
 }
 
 function determineBuffAvailability() {
-    toggleButton($('#treasure-action'), 
+    toggleButton($('#treasure-action'),
         state.stacks[3].cards.length > 0);
 
-    $('#treasure-action').html('BUFF<br>' + 
+    $('#treasure-action').html('BUFF<br>' +
         (state.stacks[3].cards.length > 0 ? '' + state.stacks[3].cards.length : ''));
 }
 
@@ -80,7 +81,7 @@ function updateHealth(previousHealth) {
     $('.health-bar').css("width", amountInPixels);
     $('.health-ui .value').first().text(state.health);
 
-    if (!isNaN(healthDelta) && healthDelta != 0) {
+    if (!isNaN(healthDelta) && healthDelta !== 0) {
         floatDamageNumbers(healthDelta);
     }
 }
@@ -90,7 +91,7 @@ function updateScore(previousScore) {
 
     $('.scoreboard .scoreboard-value').first().text('' + state.score);
 
-    if (!isNaN(scoreDelta) && scoreDelta != 0) {
+    if (!isNaN(scoreDelta) && scoreDelta !== 0) {
         floatScoreNumbers(scoreDelta);
     }
 }
@@ -136,7 +137,7 @@ function selectCardInRoom(element, selected) {
 
 function selectMap(selected) {
     var amount = selected ? '8px' : '0px';
-    
+
     $('#map-bottom').stop().animate({
             left: amount
         }, 'fast'
@@ -146,7 +147,7 @@ function selectMap(selected) {
 function drawIntoRoom(card, delay) {
     $.get('{% url card state.session_id %}?id=' + card.id, function(data) {
         $('#room').append(data);
-        
+
         var card_element = $('#card-' + card.id);
 
         card_element.css({
@@ -166,10 +167,10 @@ function drawIntoRoom(card, delay) {
 function drawIntoEquipment(card, delay) {
     $.get('{% url card state.session_id %}?id=' + card.id, function(data) {
         $('#forge').append(data);
-        
+
         var equipment = $('#equipment');
         var card_element = $('#card-' + card.id);
-        
+
         animateMove(card_element, equipment);
     });
 }
@@ -257,8 +258,8 @@ function floatNumbers(numbersElement, inSelector) {
 
 function floatDamageNumbers(damage) {
     var $floater = $(
-        '<div class="value negative">' + 
-        (damage > 0 ? '+' : '') + damage + 
+        '<div class="value negative">' +
+        (damage > 0 ? '+' : '') + damage +
         '</div>');
 
     floatNumbers($floater, '.health-ui', damage);
@@ -266,8 +267,8 @@ function floatDamageNumbers(damage) {
 
 function floatScoreNumbers(score) {
     var $floater = $(
-        '<div class="scoreboard-value negative">' + 
-        (score > 0 ? '+' : '') + score + 
+        '<div class="scoreboard-value negative">' +
+        (score > 0 ? '+' : '') + score +
         '</div>');
 
     floatNumbers($floater, '.scoreboard', score);
@@ -308,12 +309,12 @@ function bindCardActions(selector) {
                 moveToStack = $('#forge');
             }
 
-            if ((card != null && cardId != -1) && 
-                (moveToStack != null && moveToStackId != -1)) {
+            if ((card !== null && cardId != -1) &&
+                (moveToStack !== null && moveToStackId != -1)) {
                 move(cardId, moveToStackId, function(response) {
                     if (response.success) {
-                        var shouldBeDiscardedImmediately = 
-                            (card.hasClass('monster') && state.stacks[1].cards.length == 0) ||
+                        var shouldBeDiscardedImmediately =
+                            (card.hasClass('monster') && state.stacks[1].cards.length === 0) ||
                             (card.hasClass('potion'));
 
                         animateMove(card, moveToStack, function() {
@@ -428,7 +429,7 @@ $('#strike-action').mouseup(function() {
             if (state.stacks[1].cards.length > 0) {
                 $('#equipment .card').reverse().each($).wait(50, function(index) {
                     var card = $(this);
-            
+
                     animateMove(card, discarded, function() {
                         refresh(response.state);
 
@@ -440,7 +441,7 @@ $('#strike-action').mouseup(function() {
             if (state.stacks[2].cards.length > 0) {
                 $('#you .card').reverse().each($).wait(50, function(index) {
                     var card = $(this);
-        
+
                     animateMove(card, discarded, function() {
                         animateDiscard(card);
                     });
@@ -526,13 +527,13 @@ $('#menu-stats').mouseup(function() {
 });
 
 $('#menu-next').mouseup(function() {
-    $.post("{% url begin %}", 
-        { 
-            'csrfmiddlewaretoken': '{{ csrf_token }}',
+    $.post("{% url begin %}",
+        {
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
         function(response) {
             window.location.href = window.location.href.replace(
-                '/play/{{ state.session_id }}', 
+                '/play/{{ state.session_id }}',
                 '/play/{{ state.session_id|add:"1" }}');
         }
     );
