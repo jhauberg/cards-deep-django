@@ -4,6 +4,7 @@ register = template.Library()
 
 from core.models import CARD_KIND_WEAPON, CARD_KIND_POTION, CARD_KIND_MONSTER, CARD_KIND_SCRAP, CARD_KIND_TREASURE
 
+
 @register.filter
 def kind_name(kind):
     kind_name = None

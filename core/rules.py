@@ -18,10 +18,17 @@ DISCARD_CAPACITY = 10
 
 
 def roll(min, max):
+    """
+    Returns a random number between `min` and `max`.
+    """
     return random.randint(min, max)
 
 
 def get_random_card_id_in_value_range(min, max, offset):
+    """
+    Randomly picks a card ranged between `min` and `max` from a given offset.
+    The offset determines the type of card.
+    """
     card_id = roll(
         min + offset,
         max + offset)
@@ -408,9 +415,9 @@ def can_move(session, card, to_stack):
     """
     Determines whether a card can be moved to a given stack.
     """
-    if (not session or session.is_lost() or
-        not card or
-        not to_stack):
+    if (not session or session.is_lost()
+            or not card
+            or not to_stack):
         return False
 
     if to_stack == session.room_stack:
@@ -612,8 +619,8 @@ def can_skip(session):
     if not session or session.is_lost():
         return False
 
-    if (session.amount_of_cards_moved_since_last_skip == -1 or
-        session.amount_of_cards_moved_since_last_skip >= REQUIRED_TURNS_BEFORE_SKIPPING):
+    if (session.amount_of_cards_moved_since_last_skip == -1
+            or session.amount_of_cards_moved_since_last_skip >= REQUIRED_TURNS_BEFORE_SKIPPING):
         return True
 
     return False
