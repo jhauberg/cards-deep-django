@@ -528,17 +528,15 @@ $('#menu-stats').mouseup(function() {
 
 $('#menu-next').mouseup(function() {
     $('.menu').fadeTo('fast', 0);
-    
-    $('.card').reverse().each($).wait(150, function(index) {
+
+    $('.card').reverse().each($).wait(100, function(index) {
             var card = $(this);
             var discarded = $('#discarded');
 
-            animateMove(card, discarded, function() {
-                animateDiscard(card);
-            });
+            animateMove(card, discarded);
         })
 
-    $('.board').delay(500).fadeTo(1000, 0);
+    $('.board').delay(600).fadeTo(1000, 0);
 
     $.post("{% url begin %}",
         {
