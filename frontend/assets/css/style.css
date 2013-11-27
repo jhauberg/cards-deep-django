@@ -1,3 +1,60 @@
+.front {
+    padding-top: 72px;
+    margin: 0px;
+}
+
+.front-logo {
+    background-image: url('../img/front-logo.png');
+    background-repeat: no-repeat;
+    display: block;
+    margin: 0 auto;
+    width: 535px;
+    height: 143px;
+}
+
+.front-logo-subtitle {
+    text-align: center;
+    width: 20%;
+    margin: 0 auto 44px;
+}
+
+.front-menu {
+    display: block;
+    width: 20%;
+    margin: 0 auto;
+}
+
+.front-menu-item {
+    font: 14pt Helvetica, Arial, Sans-serif;
+    display: block;
+    text-align: center;
+    margin: 12px;
+    font-weight: bold;
+    color: white;
+    background-color: #61A4E6;
+    padding: 15px 0px 15px 0px;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 3px;
+
+    /* disable text selection */
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+    user-select: none;
+}
+
+.front-menu-item#register {
+    font-size: 22pt;
+}
+
+.front-menu-item.disabled {
+    pointer-events: none;
+}
+
 .header {
     width: 542px;
     margin-top: 12px;

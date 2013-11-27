@@ -6,38 +6,49 @@
 
     <body>
 
-        {% if player and request.user.is_authenticated %}
+        <div class="front">
+            <div class="front-logo">
+            </div>
+            <div class="front-logo-subtitle">
+                A fast-paced card game.
+            </div>
+            <div class="front-menu">
 
-            {% if player.active_session %}
+                {% if player and request.user.is_authenticated %}
 
-                <a href="{% url resume player.active_session.id %}">Resume</a>
+                    {% if player.active_session %}
 
-                <br />
+                        <a class="front-menu-item" href="{% url resume player.active_session.id %}">Resume</a>
 
-            {% endif %}
+                        <br />
 
-            <form action="{% url begin %}" method="post" id="new">
+                    {% endif %}
 
-                {% csrf_token %}
+                    <form action="{% url begin %}" method="post" id="new">
 
-                <input type="submit" value="New" />
+                        {% csrf_token %}
 
-            </form>
+                        <input type="submit" value="Play" />
 
-            <br />
+                    </form>
+                    
+                    <br />
 
-            <a href="{% url preferences %}">Settings</a>, 
-            <a href="{% url profile player.id %}">My Profile</a>,
-            <a href="{% url logout %}">Logout</a>
+                    <a class="front-menu-item" href="{% url preferences %}">Settings</a>
+                    <a class="front-menu-item" href="{% url profile player.id %}">My Profile</a>
+                    <a class="front-menu-item" href="{% url logout %}">Logout</a>
 
-        {% else %}
+                {% else %}
 
-            <a href="{% url register %}">Sign up</a>
+                    <a class="front-menu-item" id="register" href="{% url register %}">Sign up</a>
 
-            <a href="{% url login %}">Login</a>
-            <a href="#" id="login-as-guest">Login as Guest</a>
+                    <a class="front-menu-item" href="{% url login %}">Login</a>
+                    <a class="front-menu-item disabled" href="#" id="login-as-guest">Login as Guest</a>
 
-        {% endif %}
+                {% endif %}
+
+            </div>
+        </div>
 
     </body>
 
@@ -49,5 +60,26 @@
                 }
             );
         });
+
+        function bounce(element) {
+            $(element)
+            .animate({ 
+                margin: "10px",
+                fontSize: "16pt" 
+            }, 150)
+            .animate({ 
+                margin: "0 -18px 46px -18px",
+                fontSize: "22pt"
+            }, 125);
+        }
+
+        var signUpButtonElement = $("#register");
+
+        bounce(signUpButtonElement);
+
+        signUpButtonElement.mouseenter(function(e) {
+            bounce(this);
+        });
+        
     </script>
 </html>
