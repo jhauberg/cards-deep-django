@@ -110,7 +110,7 @@ def begin(request):
     if session is None:
         return HttpResponse(status=500)
 
-    return HttpResponseRedirect('/play/%s' % (session.id))
+    return HttpResponse(session.id)
 
 
 def resume(request, session_id):

@@ -527,6 +527,19 @@ $('#menu-stats').mouseup(function() {
 });
 
 $('#menu-next').mouseup(function() {
+    $('.menu').fadeTo('fast', 0);
+    
+    $('.card').reverse().each($).wait(150, function(index) {
+            var card = $(this);
+            var discarded = $('#discarded');
+
+            animateMove(card, discarded, function() {
+                animateDiscard(card);
+            });
+        })
+
+    $('.board').delay(500).fadeTo(1000, 0);
+
     $.post("{% url begin %}",
         {
             'csrfmiddlewaretoken': '{{ csrf_token }}'
@@ -534,7 +547,7 @@ $('#menu-next').mouseup(function() {
         function(response) {
             window.location.href = window.location.href.replace(
                 '/play/{{ state.session_id }}',
-                '/play/{{ state.session_id|add:"1" }}');
+                '/play/' + response);
         }
     );
 });
