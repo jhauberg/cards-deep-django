@@ -16,15 +16,13 @@
 
                 {% if player and request.user.is_authenticated %}
 
+                    <a class="front-menu-item" id="play" href="#">Play</a>
+
                     {% if player.active_session %}
 
-                        <a class="front-menu-item" href="{% url resume player.active_session.id %}">Resume</a>
-
-                        <br />
+                        <a class="front-menu-item" id="resume" href="{% url resume player.active_session.id %}">Resume</a>
 
                     {% endif %}
-
-                    <a class="front-menu-item" id="play" href="#">Play</a>
 
                     <br />
 
@@ -55,36 +53,65 @@
             );
         });
 
+    {% if player and request.user.is_authenticated %}
+
         $('#play').click(function(e) {
+            var menuItems = $('.front-menu-item');
+
+            menuItems.fadeTo('fast', 0.3);
+            menuItems.addClass('disabled');
+
             $.post("{% url begin %}",
                 {
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },
                 function(response) {
-                    window.location.href = window.location.href.replace('#', '') + ('play/' + response);
+                    window.location.href = 
+                        window.location.href.replace('#', '') + 
+                        ('play/' + response);
                 }
             );
         });
 
-        function bounce(element) {
-            $(element)
-            .animate({ 
-                margin: "10px",
-                fontSize: "16pt" 
-            }, 150)
-            .animate({ 
-                margin: "0 -18px 46px -18px",
-                fontSize: "22pt"
-            }, 125);
+        function bouncePlay() {
+            $('#play')
+                .animate({ 
+                    margin: "10px",
+                    fontSize: "20pt" 
+                }, 150)
+                .animate({ 
+                    margin: "0 -10px 0px -10px",
+                    fontSize: "24pt"
+                }, 125);
         }
 
-        var signUpButtonElement = $("#register");
+        bouncePlay();
 
-        bounce(signUpButtonElement);
-
-        signUpButtonElement.mouseenter(function(e) {
-            bounce(this);
+        $("#play").mouseenter(function(e) {
+            bouncePlay();
         });
-        
+
+    {% else %}
+
+        function bounceSignUp() {
+            $('#register')
+                .animate({ 
+                    margin: "10px",
+                    fontSize: "16pt" 
+                }, 150)
+                .animate({ 
+                    margin: "0 -18px 46px -18px",
+                    fontSize: "22pt"
+                }, 125);
+        }
+
+        bounceSignUp();
+
+        $("#register").mouseenter(function(e) {
+            bounceSignUp();
+        });
+
+    {% endif %}
+
     </script>
 </html>

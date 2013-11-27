@@ -48,7 +48,17 @@
 }
 
 .front-menu-item#register {
+    background-color: #297FD3;
     font-size: 22pt;
+}
+
+.front-menu-item#play {
+    background-color: #297FD3;
+    font-size: 24pt;
+}
+
+.front-menu-item#resume {
+    background-color: #297FD3;
 }
 
 .front-menu-item.disabled {
