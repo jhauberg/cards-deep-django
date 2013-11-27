@@ -1,9 +1,4 @@
-.front {
-    padding-top: 72px;
-    margin: 0px;
-}
-
-.front-logo {
+.logo {
     background-image: url('../img/front-logo.png');
     background-repeat: no-repeat;
     display: block;
@@ -12,10 +7,15 @@
     height: 143px;
 }
 
-.front-logo-subtitle {
+.logo-subtitle {
     text-align: center;
     width: 20%;
     margin: 0 auto 44px;
+}
+
+.front {
+    padding-top: 72px;
+    margin: 0px;
 }
 
 .front-menu {
@@ -67,20 +67,22 @@
 
 .header {
     width: 542px;
-    margin-top: 12px;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 0 auto;
 }
 
 .menu {
+    display: inline;
+    position: relative;
     float: left;
     list-style-type: none;
-    margin-bottom: 60px;
+    margin: 0 auto;
     padding: 0px;
+    left: 30%;
 }
 
 .menu-item {
     display: inline;
+    position: relative;
     margin-right: 6px;
 }
 
@@ -189,7 +191,7 @@
     position: relative;
     clear: both;
     left: 170px;
-    top: 60px;
+    top: 32px;
 }
 
 .health-ui {
@@ -321,7 +323,7 @@
 #action-stacks {
     clear: both;
     position: relative;
-    top: 50px;
+    top: 25px;
 }
 
 #equipment {
@@ -394,14 +396,14 @@
     clear: both;
     float: left;
     padding-top: 12px;
-    top: 110px;
+    top: 85px;
     left: 11px;
 }
 
 #treasure-action {
     float: right;
     padding-top: 12px;
-    top: 110px;
+    top: 85px;
     right: 11px;
 }
 
