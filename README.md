@@ -4,7 +4,7 @@ A web-based implementation of a [fast-paced card game](https://github.com/shrt/c
 
 It currently looks like this:
 
-<img src="https://raw.github.com/shrt/cards-deep-django/master/screenshot.png" width="600" height="445">
+<img src="https://raw.github.com/shrt/cards-deep-django/master/screenshot.png" width="440" height="360">
 
 [See it in action here](http://youtu.be/AjDEW3Q85PI)
 
