@@ -24,14 +24,8 @@
 
                     {% endif %}
 
-                    <form action="{% url begin %}" method="post" id="new">
+                    <a class="front-menu-item" id="play" href="#">Play</a>
 
-                        {% csrf_token %}
-
-                        <input type="submit" value="Play" />
-
-                    </form>
-                    
                     <br />
 
                     <a class="front-menu-item" href="{% url preferences %}">Settings</a>
@@ -57,6 +51,17 @@
             $.post("{% url login_as_guest %}", 
                 { 
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
+                }
+            );
+        });
+
+        $('#play').click(function(e) {
+            $.post("{% url begin %}",
+                {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                function(response) {
+                    window.location.href = window.location.href.replace('#', '') + ('play/' + response);
                 }
             );
         });
