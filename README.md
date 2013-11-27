@@ -1,10 +1,10 @@
-# Cards Deep
+<img src="https://raw.github.com/shrt/cards-deep-django/master/frontend/assets/img/front-logo.png" width="535" height="143">
 
 A web-based implementation of a [fast-paced card game](https://github.com/shrt/cards-deep-ruleset). Python and Django. 
 
 It currently looks like this:
 
-<img src="https://raw.github.com/shrt/cards-deep-django/master/screenshot.png" width="600" height="465">
+<img src="https://raw.github.com/shrt/cards-deep-django/master/screenshot.png" width="600" height="445">
 
 [See it in action here](http://youtu.be/AjDEW3Q85PI)
 
