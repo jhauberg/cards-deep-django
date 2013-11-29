@@ -6,7 +6,7 @@
 
     <body>
 
-    <form action="{% url register %}" method="post" onSubmit="return validates();">
+    <form action="{% url 'register' %}" method="post" onSubmit="return validates();">
         {% csrf_token %}
 
         Username*

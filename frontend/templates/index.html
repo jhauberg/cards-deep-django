@@ -20,21 +20,21 @@
 
                     {% if player.active_session %}
 
-                        <a class="front-menu-item" id="resume" href="{% url resume player.active_session.id %}">Resume</a>
+                        <a class="front-menu-item" id="resume" href="{% url 'resume' player.active_session.id %}">Resume</a>
 
                     {% endif %}
 
                     <br />
 
-                    <a class="front-menu-item" href="{% url preferences %}">Settings</a>
-                    <a class="front-menu-item" href="{% url profile player.id %}">My Profile</a>
-                    <a class="front-menu-item" href="{% url logout %}">Logout</a>
+                    <a class="front-menu-item" href="{% url 'preferences' %}">Settings</a>
+                    <a class="front-menu-item" href="{% url 'profile' player.id %}">My Profile</a>
+                    <a class="front-menu-item" href="{% url 'logout' %}">Logout</a>
 
                 {% else %}
 
-                    <a class="front-menu-item" id="register" href="{% url register %}">Sign up</a>
+                    <a class="front-menu-item" id="register" href="{% url 'register' %}">Sign up</a>
 
-                    <a class="front-menu-item" href="{% url login %}">Login</a>
+                    <a class="front-menu-item" href="{% url 'login' %}">Login</a>
                     <a class="front-menu-item disabled" href="#" id="login-as-guest">Login as Guest</a>
 
                 {% endif %}
@@ -46,7 +46,7 @@
 
     <script type="text/javascript">
         $('#login-as-guest').click(function(e) {
-            $.post("{% url login_as_guest %}", 
+            $.post("{% url 'login_as_guest' %}", 
                 { 
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 }
@@ -61,7 +61,7 @@
             menuItems.fadeTo('fast', 0.3);
             menuItems.addClass('disabled');
 
-            $.post("{% url begin %}",
+            $.post("{% url 'begin' %}",
                 {
                     'csrfmiddlewaretoken': '{{ csrf_token }}'
                 },

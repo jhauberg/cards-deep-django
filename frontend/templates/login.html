@@ -6,7 +6,7 @@
 
     <body>
 
-    <form action="{% url login %}" method="post">
+    <form action="{% url 'login' %}" method="post">
         {% csrf_token %}
 
         Username
