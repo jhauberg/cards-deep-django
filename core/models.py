@@ -5,6 +5,8 @@ from django.db.models.signals import post_save
 
 from fields import PositiveSmallIntegerRangeField
 
+from datetime import datetime
+
 CARD_KIND_WEAPON = 0
 CARD_KIND_POTION = 1
 CARD_KIND_MONSTER = 2
@@ -64,6 +66,8 @@ class Session(models.Model):
     treasure_stack = models.ForeignKey('Stack', related_name='treasure_stack')
     forge_stack = models.ForeignKey('Stack', related_name='forge_stack')
     discard_stack = models.ForeignKey('Stack', related_name='discard_stack')
+
+    time_started = models.DateTimeField(default=datetime.now)
 
     score = models.IntegerField(default=0)
     score_multiplier = models.IntegerField(default=0)
@@ -210,6 +214,7 @@ class Stack(models.Model):
 
 class Statistics(models.Model):
     cards_drawn = models.IntegerField(default=0)
+    monsters_slain = models.IntegerField(default=0)
 
     def __unicode__(self):
         return u'%s' % (self.id)
