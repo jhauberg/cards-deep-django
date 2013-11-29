@@ -1,10 +1,10 @@
-<img src="https://raw.github.com/shrt/cards-deep-django/master/frontend/assets/img/front-logo.png" width="535" height="143">
+<img src="https://raw.github.com/jhauberg/cards-deep-django/master/frontend/assets/img/front-logo.png" width="535" height="143">
 
-A web-based implementation of a [fast-paced card game](https://github.com/shrt/cards-deep-ruleset). Python and Django. 
+A web-based implementation of a [fast-paced card game](https://github.com/jhauberg/cards-deep-ruleset). Python, Django and HTML5/JavaScript. 
 
 It currently looks like this:
 
-<img src="https://raw.github.com/shrt/cards-deep-django/master/screenshot.png" width="440" height="360">
+<img src="https://raw.github.com/jhauberg/cards-deep-django/master/screenshot.png" width="440" height="360">
 
 [See it in action here](http://youtu.be/AjDEW3Q85PI)
 
@@ -31,7 +31,7 @@ Now you can open a browser and hit up [localhost](http://127.0.0.1:8000) to regi
 
 ### Modify
 
-All the cards are defined in `initial_data.json` as instances of `core.carddetail`. The amount of these should not be modified, as defined in the [rules](https://github.com/shrt/cards-deep-ruleset). But the existing ones can have their names, description and flavor texts changed. e.g:
+All the cards are defined in `initial_data.json` as instances of `core.carddetail`. The amount of these should not be modified, as defined in the [rules](https://github.com/jhauberg/cards-deep-ruleset). But the existing ones can have their names, description and flavor texts changed. e.g:
 
 ```json
 {
