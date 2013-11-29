@@ -145,7 +145,7 @@ function selectMap(selected) {
 }
 
 function drawIntoRoom(card, delay) {
-    $.get('{% url card state.session_id %}?id=' + card.id, function(data) {
+    $.get('{% url "card" state.session_id %}?id=' + card.id, function(data) {
         $('#room').append(data);
 
         var card_element = $('#card-' + card.id);
@@ -165,7 +165,7 @@ function drawIntoRoom(card, delay) {
 }
 
 function drawIntoEquipment(card, delay) {
-    $.get('{% url card state.session_id %}?id=' + card.id, function(data) {
+    $.get('{% url "card" state.session_id %}?id=' + card.id, function(data) {
         $('#forge').append(data);
 
         var equipment = $('#equipment');
@@ -538,7 +538,7 @@ $('#menu-next').mouseup(function() {
 
     $('.board').delay(600).fadeTo(1000, 0);
 
-    $.post("{% url begin %}",
+    $.post('{% url "begin" %}',
         {
             'csrfmiddlewaretoken': '{{ csrf_token }}'
         },
