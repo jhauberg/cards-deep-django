@@ -536,18 +536,18 @@ $('#menu-next').mouseup(function() {
             animateMove(card, discarded);
         })
 
-    $('.board').delay(600).fadeTo(1000, 0);
-
-    $.post('{% url "begin" %}',
-        {
-            'csrfmiddlewaretoken': '{{ csrf_token }}'
-        },
-        function(response) {
-            window.location.href = window.location.href.replace(
-                '/play/{{ state.session_id }}',
-                '/play/' + response);
-        }
-    );
+    $('.board').delay(600).fadeTo(1000, 0, function() {
+        $.post('{% url "begin" %}',
+            {
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            function(response) {
+                window.location.href = window.location.href.replace(
+                    '/play/{{ state.session_id }}',
+                    '/play/' + response);
+            }
+        );
+    });
 });
 
 bindCardActions('#room .card');
