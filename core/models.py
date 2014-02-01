@@ -5,7 +5,7 @@ from django.db.models.signals import post_save
 
 from fields import PositiveSmallIntegerRangeField
 
-from datetime import datetime
+import django.utils.timezone
 
 CARD_KIND_WEAPON = 0
 CARD_KIND_POTION = 1
@@ -67,7 +67,7 @@ class Session(models.Model):
     forge_stack = models.ForeignKey('Stack', related_name='forge_stack')
     discard_stack = models.ForeignKey('Stack', related_name='discard_stack')
 
-    time_started = models.DateTimeField(default=datetime.now)
+    time_started = models.DateTimeField(default=django.utils.timezone.now)
 
     score = models.IntegerField(default=0)
     score_multiplier = models.IntegerField(default=0)
