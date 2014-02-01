@@ -81,7 +81,7 @@ treasure_range = range(90, 100)
 
 ## License
 
-    Copyright 2013 Jacob Hauberg Hansen.
+    Copyright 2014 Jacob Hauberg Hansen.
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in
