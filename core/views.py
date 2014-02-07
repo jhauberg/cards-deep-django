@@ -71,7 +71,7 @@ def current_state(session):
 
     return {
         'session_id': session.id,
-        'session_started': 0, # session.time_started,
+        'session_started': str(session.time_started),
         'is_lost': session.is_lost(),
         'health': int(session.health),
         'score': int(session.score),
