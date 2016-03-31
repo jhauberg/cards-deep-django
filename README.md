@@ -1,6 +1,6 @@
 <img src="https://raw.github.com/jhauberg/cards-deep-django/master/frontend/assets/img/front-logo.png" width="535" height="143">
 
-A web-based implementation of a [fast-paced card game](https://github.com/jhauberg/cards-deep-ruleset). Python, Django and HTML5/JavaScript. 
+A web-based implementation of a fast-paced card game. Python, Django and HTML5/JavaScript. 
 
 It currently looks like this:
 
@@ -18,11 +18,9 @@ But that also means that the game has to be installed with a database and hosted
 
 ### Install
 
-To get the game up and running, you need to have `python` and `django` installed. After that you just go:
+**WARNING - REQUIRES DJANGO 1.6**
 
-    $ cd cards-deep-django
-
-And then:
+To get the game up and running, you need to have `Python` and `Django` installed. After that you just go:
 
     $ python manage.py syncdb
     $ python manage.py runserver
