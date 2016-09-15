@@ -1,3 +1,7 @@
+**UPDATE - THIS PROJECT EVOLVED INTO A [REAL CARD GAME](https://github.com/jhauberg/dungeon-deck)**
+
+---
+
 <img src="https://raw.github.com/jhauberg/cards-deep-django/master/frontend/assets/img/front-logo.png" width="535" height="143">
 
 A web-based implementation of a fast-paced card game. Python, Django and HTML5/JavaScript. 
